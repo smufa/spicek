@@ -8,19 +8,18 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from './auth.guard';
-import { AuthService } from './auth.service';
-import { SignupCreateDto } from './dto/signup-create.dto';
-import { SigninDto } from './dto/signin.dto';
 import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { RequestWithUAT, UserRequest } from 'src/common/auth-types';
+import { RequestWithUAT } from 'src/common/auth-types';
+import { AuthGuard } from './auth.guard';
+import { AuthService } from './auth.service';
 import { UserRequestOut } from './dto/profile-out.dto';
+import { SigninDto } from './dto/signin.dto';
+import { SignupCreateDto } from './dto/signup-create.dto';
 
 @Controller('auth')
 @ApiTags('Auth')

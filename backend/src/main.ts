@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { urlencoded, json } from 'express';
+import { ConfigService } from '@nestjs/config';
+import { Env } from './env/env';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,9 +32,24 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
+  const configService = app.get<ConfigService<Env>>(ConfigService);
+
   app.enableCors();
 
-  await app.listen(3000);
+  if (configService.get('NODE_ENV') === 'development') {
+    app.enableShutdownHooks();
+  }
+
+  if (!configService.get('PORT')) {
+    throw new Error('PORT is not defined');
+  }
+
+  Logger.log(
+    `App running on ${configService.get('NODE_ENV')} mode on port ${configService.get('PORT')}`,
+    'Bootstrap',
+  );
+
+  await app.listen(configService.get('PORT') as number);
 }
 
-bootstrap();
+void bootstrap();

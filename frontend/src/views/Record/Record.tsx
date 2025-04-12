@@ -1,7 +1,24 @@
-import { Box, Button, Center, Group, Paper, rem, RingProgress, Stack, Title, Text } from "@mantine/core";
-import { IconCheck, IconPlayerPlay, IconRefresh, IconVideo, IconVideoOff } from "@tabler/icons-react";
-import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Center,
+  Group,
+  Paper,
+  rem,
+  RingProgress,
+  Stack,
+  Title,
+  Text,
+} from '@mantine/core';
+import {
+  IconCheck,
+  IconPlayerPlay,
+  IconRefresh,
+  IconVideo,
+  IconVideoOff,
+} from '@tabler/icons-react';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Record = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -54,7 +71,7 @@ export const Record = () => {
       };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: "video/webm" });
+        const blob = new Blob(chunksRef.current, { type: 'video/webm' });
         setRecordedBlob(blob);
 
         if (videoRef.current) {
@@ -74,7 +91,7 @@ export const Record = () => {
       mediaRecorder.start();
       setIsRecording(true);
     } catch (error) {
-      console.error("Error accessing media devices:", error);
+      console.error('Error accessing media devices:', error);
     }
   };
 
@@ -100,14 +117,14 @@ export const Record = () => {
     setRecordingTime(0);
 
     if (videoRef.current) {
-      videoRef.current.src = "";
+      videoRef.current.src = '';
       videoRef.current.controls = false;
     }
   };
 
   const handleSubmit = () => {
     // In a real application, you would upload the video to your server here
-    navigate("/analyze", {
+    navigate('/analyze', {
       state: {
         videoUrl: recordedBlob ? URL.createObjectURL(recordedBlob) : null,
       },
@@ -118,9 +135,9 @@ export const Record = () => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs
+    return `${mins.toString().padStart(2, '0')}:${secs
       .toString()
-      .padStart(2, "0")}`;
+      .padStart(2, '0')}`;
   };
 
   return (
@@ -132,7 +149,7 @@ export const Record = () => {
           radius="md"
           shadow="sm"
           style={{
-            width: "100%",
+            width: '100%',
             maxWidth: rem(500),
           }}
         >
@@ -143,14 +160,14 @@ export const Record = () => {
 
             <Center
               style={{
-                position: "relative",
-                width: "100%",
-                maxWidth: "450px",
-                margin: "0 auto",
-                aspectRatio: "4/3",
-                borderRadius: "8px",
-                overflow: "hidden",
-                backgroundColor: "#1a1b1e",
+                position: 'relative',
+                width: '100%',
+                maxWidth: '450px',
+                margin: '0 auto',
+                aspectRatio: '4/3',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                backgroundColor: '#1a1b1e',
               }}
             >
               <video
@@ -159,25 +176,25 @@ export const Record = () => {
                 muted={isRecording}
                 playsInline
                 style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "8px",
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  borderRadius: '8px',
                 }}
               />
 
               {!isRecording && !isPreviewMode && !recordedBlob && (
                 <Box
                   style={{
-                    position: "absolute",
+                    position: 'absolute',
                     top: 0,
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "rgba(0,0,0,0.5)",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(0,0,0,0.5)',
                   }}
                 >
                   <IconVideo size={48} color="#fff" opacity={0.8} />
@@ -187,23 +204,23 @@ export const Record = () => {
               {isRecording && (
                 <Box
                   style={{
-                    position: "absolute",
+                    position: 'absolute',
                     top: 10,
                     right: 10,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    borderRadius: "4px",
-                    padding: "4px 8px",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    borderRadius: '4px',
+                    padding: '4px 8px',
                   }}
                 >
                   <Box
                     style={{
                       width: 10,
                       height: 10,
-                      borderRadius: "50%",
-                      backgroundColor: "#fa5252",
+                      borderRadius: '50%',
+                      backgroundColor: '#fa5252',
                       marginRight: 8,
                     }}
                   />
@@ -224,18 +241,17 @@ export const Record = () => {
                       <IconVideo size={20} />
                     )
                   }
-                  color={isRecording ? "red" : "blue"}
+                  color={isRecording ? 'red' : ''}
                   onClick={isRecording ? stopRecording : startRecording}
                   radius="md"
                   size="md"
                 >
-                  {isRecording ? "Stop Recording" : "Start Recording"}
+                  {isRecording ? 'Stop Recording' : 'Start Recording'}
                 </Button>
               ) : (
                 <>
                   <Button
                     leftSection={<IconPlayerPlay size={20} />}
-                    color="blue"
                     onClick={handleSubmit}
                     radius="md"
                     size="md"
@@ -269,7 +285,7 @@ export const Record = () => {
           radius="md"
           shadow="sm"
           style={{
-            width: "100%",
+            width: '100%',
             maxWidth: rem(500),
           }}
         >
@@ -281,7 +297,7 @@ export const Record = () => {
               <RingProgress
                 size={60}
                 thickness={4}
-                sections={[{ value: 100, color: "blue" }]}
+                sections={[{ value: 100, color: 'blue' }]}
                 label={
                   <Center>
                     <IconVideo size={20} />
@@ -303,7 +319,7 @@ export const Record = () => {
               <RingProgress
                 size={60}
                 thickness={4}
-                sections={[{ value: 100, color: "green" }]}
+                sections={[{ value: 100, color: 'green' }]}
                 label={
                   <Center>
                     <IconCheck size={20} />
@@ -325,7 +341,7 @@ export const Record = () => {
               <RingProgress
                 size={60}
                 thickness={4}
-                sections={[{ value: 100, color: "violet" }]}
+                sections={[{ value: 100, color: 'violet' }]}
                 label={
                   <Center>
                     <IconPlayerPlay size={20} />

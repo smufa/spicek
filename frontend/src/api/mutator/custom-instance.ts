@@ -1,13 +1,10 @@
-import { getUser } from '@/auth/getUser';
-import { showError } from '@/commons/notifications';
-import { ENV } from '@/shared/projectEnvVariables';
-import { useUserPrefsStore } from '@/store';
 import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { t } from 'i18next';
+import { $currUser } from '../../global-store/userStore';
 import qs from 'qs';
+import { showError } from '../../commons/notifications';
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: ENV.VITE_BACKEND_API,
+  baseURL: import.meta.env.VITE_BACKEND_API,
   paramsSerializer: {
     // Important to use qs instead of the default URLSearchParams
     serialize: (params) => {
@@ -28,7 +25,7 @@ export const customInstance = <T>(
     cancelToken: source.token,
   }).then(({ data }) => data);
 
-  // @ts-ignore
+  // @ts-expect-error neki cudno
   promise.cancel = () => {
     source.cancel('Query was cancelled');
   };
@@ -38,13 +35,9 @@ export const customInstance = <T>(
 
 AXIOS_INSTANCE.interceptors.request.use(
   (config) => {
-    const token = getUser()?.access_token;
-    const userPrefs = useUserPrefsStore.getState();
+    const token = $currUser.get()?.accessToken;
 
     config.headers.Authorization = token ? `Bearer ${token}` : '';
-    if (userPrefs.language) {
-      config.headers['Accept-Language'] = userPrefs.language;
-    }
 
     return config;
   },
@@ -60,7 +53,7 @@ AXIOS_INSTANCE.interceptors.response.use(
     }
 
     if (error.response?.status == 403) {
-      showError(t('notifications.403.message'));
+      showError('403 Error');
     }
 
     throw error;

@@ -12,10 +12,14 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
-import { useAuthControllerSignIn } from '../api/auth/auth';
+import { useAuthControllerSignIn } from '../../api/auth/auth';
+import { $currUser } from '../../global-store/userStore';
+import { useNavigate } from 'react-router-dom';
 
-export function Authentication() {
-  const { mutate } = useAuthControllerSignIn();
+export function Login() {
+  const { mutateAsync } = useAuthControllerSignIn();
+  const navigate = useNavigate();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -42,7 +46,17 @@ export function Authentication() {
             <form
               onSubmit={form.onSubmit(async (values) => {
                 console.log(values);
-                mutate({});
+                mutateAsync({
+                  data: {
+                    password: values.password,
+                    username: values.email,
+                  },
+                }).then((data) => {
+                  $currUser.set({
+                    accessToken: data.access_token,
+                  });
+                  navigate('/');
+                });
               })}
             >
               <TextInput

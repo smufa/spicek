@@ -125,7 +125,7 @@ export const Record = () => {
 
   return (
     <Stack>
-      <Group justify="center" align="flex-start">
+      <Group justify="center" align="flex-start" id="record">
         <Paper
           withBorder
           p="md"

@@ -14,9 +14,12 @@ import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
 import { useAuthControllerSignIn } from '../../api/auth/auth';
 import { $currUser } from '../../global-store/userStore';
+import { useNavigate } from 'react-router-dom';
 
 export function Login() {
   const { mutateAsync } = useAuthControllerSignIn();
+  const navigate = useNavigate();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -52,6 +55,7 @@ export function Login() {
                   $currUser.set({
                     accessToken: data.access_token,
                   });
+                  navigate('/');
                 });
               })}
             >

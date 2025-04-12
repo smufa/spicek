@@ -1,18 +1,21 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { createTheme, MantineProvider } from "@mantine/core";
-import { RouterProvider } from "react-router-dom";
-import { router } from "./router/router";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { createTheme, MantineProvider } from '@mantine/core';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './router/router';
 
-import "@mantine/core/styles.css";
-import "@mantine/notifications/styles.css";
-import "@mantine/spotlight/styles.css";
-import "@mantine/charts/styles.css";
-import { Notifications } from "@mantine/notifications";
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/spotlight/styles.css';
+import '@mantine/charts/styles.css';
+import { Notifications } from '@mantine/notifications';
 
-const theme = createTheme({});
+const theme = createTheme({
+  primaryColor: 'dark',
+  primaryShade: 6,
+});
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <MantineProvider theme={theme}>
       <Notifications />
@@ -20,5 +23,5 @@ createRoot(document.getElementById("root")!).render(
       <RouterProvider router={router} />
       {/* </ModalsProvider> */}
     </MantineProvider>
-  </StrictMode>
+  </StrictMode>,
 );

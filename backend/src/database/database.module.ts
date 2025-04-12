@@ -22,7 +22,7 @@ import { EnvService } from '../env/env.service';
           migrations: [`${__dirname}/../migrations/*{.ts,.js}`],
           synchronize: true,
           migrationsRun: true,
-          logging: true,
+          // logging: true,
         };
       },
     }),

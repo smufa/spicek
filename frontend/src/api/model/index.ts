@@ -8,10 +8,16 @@
 
 export * from './accessTokenDto';
 export * from './createSessionDto';
+export * from './normalizedLandmarkDto';
+export * from './poseDataCollectionDto';
+export * from './poseFrameDto';
 export * from './session';
 export * from './sessionControllerCreateDefault';
+export * from './sessionUploadState';
+export * from './sesssionVideoDataDto';
 export * from './signinDto';
 export * from './signupCreateDto';
 export * from './updateSessionDto';
+export * from './uploadPoseDataDto';
 export * from './userRequestOut';
 export * from './users';

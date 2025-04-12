@@ -1,9 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { Camera } from '@mediapipe/camera_utils';
-import { Pose, Results, POSE_CONNECTIONS } from '@mediapipe/pose';
+import {
+  Pose,
+  Results,
+  POSE_CONNECTIONS,
+  NormalizedLandmarkList,
+} from '@mediapipe/pose';
 import { drawConnectors } from '@mediapipe/drawing_utils';
+import { Session } from '../api/model';
+import {
+  useSessionControllerUploadData,
+  useSessionControllerUploadVideo,
+} from '../api/sessions/sessions';
 
-const Testing = () => {
+type Props = {
+  session: Session;
+};
+
+const Testing = ({ session }: Props) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const displayCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -13,7 +27,15 @@ const Testing = () => {
   const audioStreamRef = useRef<MediaStream | null>(null);
 
   const [isRecording, setIsRecording] = useState(false);
-  const [isPoseDetectionActive, setIsPoseDetectionActive] = useState(false);
+  const poseData = useRef<
+    { timestamp: number; landmarks: NormalizedLandmarkList }[]
+  >([]);
+  const isCollectingPoseData = useRef(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
+
+  const { mutateAsync: uploadVideoApi } = useSessionControllerUploadVideo();
+  const { mutateAsync: uploadDataApi } = useSessionControllerUploadData();
 
   useEffect(() => {
     if (!videoRef.current || !canvasRef.current || !displayCanvasRef.current)
@@ -45,6 +67,14 @@ const Testing = () => {
 
     pose.onResults((results: Results) => {
       if (!ctx || !displayCtx) return;
+
+      // Collect pose data if recording
+      if (isCollectingPoseData.current == true && results.poseLandmarks) {
+        poseData.current.push({
+          timestamp: Date.now(),
+          landmarks: JSON.parse(JSON.stringify(results.poseLandmarks)),
+        });
+      }
 
       // Draw video frame to the recording canvas (without skeleton)
       ctx.save();
@@ -113,9 +143,7 @@ const Testing = () => {
     // Set up camera
     const camera = new Camera(video, {
       onFrame: async () => {
-        if (isPoseDetectionActive) {
-          await pose.send({ image: video });
-        }
+        await pose.send({ image: video });
       },
       width: 640,
       height: 480,
@@ -134,14 +162,21 @@ const Testing = () => {
         audioStreamRef.current.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [isPoseDetectionActive]);
+  }, []);
 
   // Set up video recording with audio
   const startRecording = async () => {
     if (!canvasRef.current) return;
 
     try {
-      // Get audio stream
+      // Reset pose data array
+      poseData.current = [];
+      setUploadStatus('');
+
+      // Start collecting pose data
+      isCollectingPoseData.current = true;
+
+      // Get audio stream with minimal processing
       audioStreamRef.current = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: false,
@@ -172,56 +207,85 @@ const Testing = () => {
         }
       };
 
+      // gets called in stopRecording
       recorderRef.current.onstop = () => {
-        saveRecording();
+        uploadRecording();
       };
 
       recorderRef.current.start();
       setIsRecording(true);
-      setIsPoseDetectionActive(true);
     } catch (error) {
       console.error('Error starting recording:', error);
+      setUploadStatus('Error starting recording');
     }
   };
 
   const stopRecording = () => {
-    if (recorderRef.current && recorderRef.current.state !== 'inactive') {
-      recorderRef.current.stop();
-      setIsRecording(false);
+    if (!recorderRef.current) return;
 
-      // Stop audio tracks
-      if (audioStreamRef.current) {
-        audioStreamRef.current.getTracks().forEach((track) => track.stop());
-      }
+    recorderRef.current.stop();
+    setIsRecording(false);
+
+    // Stop collecting pose data
+    isCollectingPoseData.current = false;
+
+    // Stop audio tracks
+    if (audioStreamRef.current) {
+      audioStreamRef.current.getTracks().forEach((track) => track.stop());
     }
   };
 
-  const saveRecording = () => {
-    const blob = new Blob(recordedChunksRef.current, { type: 'video/webm' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+  const uploadRecording = async () => {
+    setIsUploading(true);
+    setUploadStatus('Uploading...');
 
-    a.style.display = 'none';
-    a.href = url;
-    a.download = `pose-detection-${new Date().toISOString()}.webm`;
+    // Create video blob
+    const videoBlob = new Blob(recordedChunksRef.current, {
+      type: 'video/webm',
+    });
 
-    document.body.appendChild(a);
-    a.click();
+    // Get video size
+    const videoSize = videoBlob.size;
 
-    setTimeout(() => {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 100);
-  };
+    if (videoSize < 100) {
+      console.error('Video size is too small:', videoSize);
+      setIsUploading(false);
 
-  const togglePoseDetection = () => {
-    setIsPoseDetectionActive(!isPoseDetectionActive);
+      return;
+    }
+
+    // Create form data to send
+    const formData = new FormData();
+    formData.append('video', videoBlob, `video.webm`);
+
+    await uploadVideoApi({
+      id: session.id.toString(),
+      data: {
+        video: videoBlob,
+      },
+    })
+      .then(async () => {
+        await uploadDataApi({
+          id: session.id.toString(),
+          data: {
+            poseData: poseData.current,
+          },
+        });
+        setUploadStatus('Upload successful');
+      })
+      .catch((error) => {
+        console.error('Upload error:', error);
+        setUploadStatus('Upload failed');
+      })
+      .finally(() => {
+        // Clean up recorded chunks
+        recordedChunksRef.current = [];
+        isCollectingPoseData.current = false;
+      });
   };
 
   return (
     <div className="app-container">
-      <h1>Pose Detection with Video and Audio Recording</h1>
-
       <div className="video-container">
         <video
           ref={videoRef}
@@ -246,19 +310,31 @@ const Testing = () => {
       </div>
 
       <div className="controls">
-        <button onClick={togglePoseDetection} disabled={isRecording}>
-          {isPoseDetectionActive ? 'Disable' : 'Enable'} Pose Detection
-        </button>
-
         <button
-          onClick={isRecording ? stopRecording : startRecording}
+          onClick={() => {
+            if (isRecording) {
+              stopRecording();
+            } else {
+              startRecording();
+            }
+          }}
           className={isRecording ? 'stop' : 'start'}
+          disabled={isUploading}
         >
           {isRecording ? 'Stop Recording' : 'Start Recording'}
         </button>
+
+        <div className="pose-data-info">
+          {isCollectingPoseData ? (
+            <span>Recording pose data: {poseData.current.length} frames</span>
+          ) : isUploading ? (
+            <span>Uploading... Please wait.</span>
+          ) : (
+            uploadStatus && <span>{uploadStatus}</span>
+          )}
+        </div>
       </div>
     </div>
   );
 };
-
 export default Testing;

@@ -1,12 +1,15 @@
-import { Alert, Button, Drawer, LoadingOverlay, Stack } from '@mantine/core';
-import { SessionCard } from '../SessionCards/SessionCard';
+import { Alert, Button, Drawer, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useSessionControllerFindAll } from '../../api/sessions/sessions';
 import { Link } from 'react-router-dom';
+import { Session } from '../../api/model';
+import { SessionCard } from '../SessionCards/SessionCard';
 
-export const SessionDrawer = () => {
+type Props = {
+  data: Session[];
+};
+
+export const SessionDrawer = ({ data }: Props) => {
   const [opened, { close, toggle }] = useDisclosure(false);
-  const { data, isLoading, error } = useSessionControllerFindAll();
   return (
     <>
       <Button onClick={toggle}>toggle drawer</Button>
@@ -17,12 +20,6 @@ export const SessionDrawer = () => {
         size="md"
       >
         <Stack pos="relative">
-          {isLoading && <LoadingOverlay />}
-          {error && (
-            <Alert c="red" title="Error">
-              Error retreiving previous sessions
-            </Alert>
-          )}
           {data?.length == 0 && (
             <Alert title="No data">
               <Stack>

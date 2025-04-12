@@ -5,15 +5,23 @@
  * WIP
  * OpenAPI spec version: 1.0
  */
+import type { SessionUploadState } from './sessionUploadState';
 import type { Users } from './users';
+import type { PoseFrameDto } from './poseFrameDto';
 
 export interface Session {
   id: number;
   name: string;
   description: string;
   createdAt: string;
-  videoFileName: string;
-  durationMs: number;
+  /** @nullable */
+  videoFileName: string | null;
+  /** @nullable */
+  videoSize: number | null;
+  /** @nullable */
+  durationMs: number | null;
+  uploadState: SessionUploadState;
   user: Users;
-  userId: string;
+  userId: number;
+  poseData: PoseFrameDto[];
 }

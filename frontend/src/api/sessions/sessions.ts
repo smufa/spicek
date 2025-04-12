@@ -24,8 +24,9 @@ import type {
 import type {
   CreateSessionDto,
   Session,
-  SessionControllerCreateDefault,
+  SesssionVideoDataDto,
   UpdateSessionDto,
+  UploadPoseDataDto,
 } from '.././model';
 
 import { customInstance } from '.././mutator/custom-instance';
@@ -41,7 +42,7 @@ export const sessionControllerCreate = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<SessionControllerCreateDefault>(
+  return customInstance<Session>(
     {
       url: `/sessions`,
       method: 'POST',
@@ -54,7 +55,7 @@ export const sessionControllerCreate = (
 };
 
 export const getSessionControllerCreateMutationOptions = <
-  TError = ErrorType<SessionControllerCreateDefault>,
+  TError = ErrorType<Session>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -95,14 +96,13 @@ export type SessionControllerCreateMutationResult = NonNullable<
   Awaited<ReturnType<typeof sessionControllerCreate>>
 >;
 export type SessionControllerCreateMutationBody = CreateSessionDto;
-export type SessionControllerCreateMutationError =
-  ErrorType<SessionControllerCreateDefault>;
+export type SessionControllerCreateMutationError = ErrorType<Session>;
 
 /**
  * @summary Create a new session for a user
  */
 export const useSessionControllerCreate = <
-  TError = ErrorType<SessionControllerCreateDefault>,
+  TError = ErrorType<Session>,
   TContext = unknown,
 >(
   options?: {
@@ -454,3 +454,527 @@ export const useSessionControllerDelete = <
 
   return useMutation(mutationOptions, queryClient);
 };
+/**
+ * @summary Get a session by id
+ */
+export const sessionControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<Session>(
+    { url: `/sessions/${id}`, method: 'GET', signal },
+    options,
+  );
+};
+
+export const getSessionControllerFindOneQueryKey = (id: string) => {
+  return [`/sessions/${id}`] as const;
+};
+
+export const getSessionControllerFindOneQueryOptions = <
+  TData = Awaited<ReturnType<typeof sessionControllerFindOne>>,
+  TError = ErrorType<Session>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getSessionControllerFindOneQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof sessionControllerFindOne>>
+  > = ({ signal }) => sessionControllerFindOne(id, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof sessionControllerFindOne>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type SessionControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof sessionControllerFindOne>>
+>;
+export type SessionControllerFindOneQueryError = ErrorType<Session>;
+
+export function useSessionControllerFindOne<
+  TData = Awaited<ReturnType<typeof sessionControllerFindOne>>,
+  TError = ErrorType<Session>,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerFindOne>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof sessionControllerFindOne>>,
+          TError,
+          Awaited<ReturnType<typeof sessionControllerFindOne>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useSessionControllerFindOne<
+  TData = Awaited<ReturnType<typeof sessionControllerFindOne>>,
+  TError = ErrorType<Session>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerFindOne>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof sessionControllerFindOne>>,
+          TError,
+          Awaited<ReturnType<typeof sessionControllerFindOne>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useSessionControllerFindOne<
+  TData = Awaited<ReturnType<typeof sessionControllerFindOne>>,
+  TError = ErrorType<Session>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get a session by id
+ */
+
+export function useSessionControllerFindOne<
+  TData = Awaited<ReturnType<typeof sessionControllerFindOne>>,
+  TError = ErrorType<Session>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getSessionControllerFindOneQueryOptions(id, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Upload a WebM video file with array data
+ */
+export const sessionControllerUploadVideo = (
+  id: string,
+  sesssionVideoDataDto: SesssionVideoDataDto,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  const formData = new FormData();
+  formData.append('video', sesssionVideoDataDto.video);
+
+  return customInstance<void>(
+    {
+      url: `/sessions/${id}/upload/video`,
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      data: formData,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getSessionControllerUploadVideoMutationOptions = <
+  TError = ErrorType<void | string>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sessionControllerUploadVideo>>,
+    TError,
+    { id: string; data: SesssionVideoDataDto },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sessionControllerUploadVideo>>,
+  TError,
+  { id: string; data: SesssionVideoDataDto },
+  TContext
+> => {
+  const mutationKey = ['sessionControllerUploadVideo'];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sessionControllerUploadVideo>>,
+    { id: string; data: SesssionVideoDataDto }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return sessionControllerUploadVideo(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SessionControllerUploadVideoMutationResult = NonNullable<
+  Awaited<ReturnType<typeof sessionControllerUploadVideo>>
+>;
+export type SessionControllerUploadVideoMutationBody = SesssionVideoDataDto;
+export type SessionControllerUploadVideoMutationError = ErrorType<
+  void | string
+>;
+
+/**
+ * @summary Upload a WebM video file with array data
+ */
+export const useSessionControllerUploadVideo = <
+  TError = ErrorType<void | string>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof sessionControllerUploadVideo>>,
+      TError,
+      { id: string; data: SesssionVideoDataDto },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof sessionControllerUploadVideo>>,
+  TError,
+  { id: string; data: SesssionVideoDataDto },
+  TContext
+> => {
+  const mutationOptions =
+    getSessionControllerUploadVideoMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary Upload data at the end of a session
+ */
+export const sessionControllerUploadData = (
+  id: string,
+  uploadPoseDataDto: UploadPoseDataDto,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<void>(
+    {
+      url: `/sessions/${id}/upload`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: uploadPoseDataDto,
+      signal,
+    },
+    options,
+  );
+};
+
+export const getSessionControllerUploadDataMutationOptions = <
+  TError = ErrorType<Session>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sessionControllerUploadData>>,
+    TError,
+    { id: string; data: UploadPoseDataDto },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sessionControllerUploadData>>,
+  TError,
+  { id: string; data: UploadPoseDataDto },
+  TContext
+> => {
+  const mutationKey = ['sessionControllerUploadData'];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sessionControllerUploadData>>,
+    { id: string; data: UploadPoseDataDto }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return sessionControllerUploadData(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SessionControllerUploadDataMutationResult = NonNullable<
+  Awaited<ReturnType<typeof sessionControllerUploadData>>
+>;
+export type SessionControllerUploadDataMutationBody = UploadPoseDataDto;
+export type SessionControllerUploadDataMutationError = ErrorType<Session>;
+
+/**
+ * @summary Upload data at the end of a session
+ */
+export const useSessionControllerUploadData = <
+  TError = ErrorType<Session>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof sessionControllerUploadData>>,
+      TError,
+      { id: string; data: UploadPoseDataDto },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof sessionControllerUploadData>>,
+  TError,
+  { id: string; data: UploadPoseDataDto },
+  TContext
+> => {
+  const mutationOptions =
+    getSessionControllerUploadDataMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+export const sessionControllerGetSessionVideo = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<void>(
+    { url: `/sessions/${id}/video`, method: 'GET', signal },
+    options,
+  );
+};
+
+export const getSessionControllerGetSessionVideoQueryKey = (id: string) => {
+  return [`/sessions/${id}/video`] as const;
+};
+
+export const getSessionControllerGetSessionVideoQueryOptions = <
+  TData = Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+  TError = ErrorType<void>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getSessionControllerGetSessionVideoQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>
+  > = ({ signal }) =>
+    sessionControllerGetSessionVideo(id, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type SessionControllerGetSessionVideoQueryResult = NonNullable<
+  Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>
+>;
+export type SessionControllerGetSessionVideoQueryError = ErrorType<void>;
+
+export function useSessionControllerGetSessionVideo<
+  TData = Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+  TError = ErrorType<void>,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+          TError,
+          Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useSessionControllerGetSessionVideo<
+  TData = Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+  TError = ErrorType<void>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+          TError,
+          Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useSessionControllerGetSessionVideo<
+  TData = Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+  TError = ErrorType<void>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useSessionControllerGetSessionVideo<
+  TData = Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+  TError = ErrorType<void>,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof sessionControllerGetSessionVideo>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getSessionControllerGetSessionVideoQueryOptions(
+    id,
+    options,
+  );
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}

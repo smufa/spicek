@@ -20,6 +20,7 @@ import { AuthService } from './auth.service';
 import { UserRequestOut } from './dto/profile-out.dto';
 import { SigninDto } from './dto/signin.dto';
 import { SignupCreateDto } from './dto/signup-create.dto';
+import { AccessTokenDto } from './dto/access-token.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -34,9 +35,12 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Login' })
+  @ApiOkResponse({
+    description: 'Login successful',
+  })
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: SigninDto) {
+  signIn(@Body() signInDto: SigninDto): Promise<AccessTokenDto> {
     return this.authService.signIn(signInDto.username, signInDto.password);
   }
 

@@ -1,16 +1,16 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "../views/Main/App";
-import { AppLayout } from "../views/Main/AppLayout";
-import { Analyze } from "../views/Analyze/Analyze";
-import { Record } from "../views/Record/Record";
-import { Login } from "../views/Auth/Login";
-import { Register } from "../views/Auth/Register";
-import Testing from "../views/Testing";
-import { ProtectedPath } from "../views/Auth/ProtectedPath";
+import { createBrowserRouter } from 'react-router-dom';
+import App from '../views/Main/App';
+import { AppLayout } from '../views/Main/AppLayout';
+import { Analyze } from '../views/Analyze/Analyze';
+import { Record } from '../views/Record/Record';
+import { Login } from '../views/Auth/Login';
+import { Register } from '../views/Auth/Register';
+import Testing from '../views/Testing';
+import { ProtectedPath } from '../views/Auth/ProtectedPath';
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: (
       <ProtectedPath redirectUrl="/login">
         <AppLayout />
@@ -18,30 +18,30 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/",
+        path: '/',
         element: <App />,
       },
       {
-        path: "/analyze",
+        path: '/analyze/:id',
         element: <Analyze />,
       },
       {
-        path: "/record",
+        path: '/record',
         element: <Record />,
       },
       {
-        path: "/jan",
+        path: '/jan',
         element: <Testing />,
       },
     ],
   },
 
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
   },
   {
-    path: "/register",
+    path: '/register',
     element: <Register />,
   },
 ]);

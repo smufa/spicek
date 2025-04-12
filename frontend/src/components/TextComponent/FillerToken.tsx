@@ -27,6 +27,7 @@ export const FillerToken = ({
         style={{
           cursor: 'pointer',
         }}
+        radius="sm"
         mx="2px"
         // py="lg"
         color={active ? 'cyan' : getFillerColor(token.fillerType)}

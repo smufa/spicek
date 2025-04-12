@@ -5,7 +5,7 @@ export const AppLayout = () => {
   const navigate = useNavigate();
 
   return (
-    <Stack>
+    <Stack h="100%" p="0" w="100%">
       <Group>
         <Title>nekaj</Title>
         <Button

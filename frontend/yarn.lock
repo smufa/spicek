@@ -273,7 +273,7 @@
 
 "@mantine/charts@^7.17.4":
   version "7.17.4"
-  resolved "https://registry.npmjs.org/@mantine/charts/-/charts-7.17.4.tgz"
+  resolved "https://registry.yarnpkg.com/@mantine/charts/-/charts-7.17.4.tgz#b4dfb5cd64187a96366498f5d1f1278317a1c71e"
   integrity sha512-datvi9GkMRrL9SY2R5Pd7MpP6d7QxRFYMY7DcdE/V3JnwMmg+gCg+QfzvrT947R8sEiBZECirTI0yNLWDSwkGw==
 
 "@mantine/core@^7.17.4":

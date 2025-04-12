@@ -1,4 +1,4 @@
-import { Box, Group, Stack, Badge } from '@mantine/core';
+import { Stack, Badge } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
 import { useStore } from '@nanostores/react';
 import { $currUser } from '../../global-store/userStore';
@@ -6,13 +6,11 @@ import { $currUser } from '../../global-store/userStore';
 export const AppLayout = () => {
   const usr = useStore($currUser);
   return (
-    <Stack h="100%" p="0" w="100%">
-      <Group></Group>
-      <Box flex={1}>
-        <Outlet />
-      </Box>
+    <Stack h="100vh" w="100%" p="md">
+      <Outlet />
       <Badge
         m="sm"
+        size="xs"
         style={{
           position: 'absolute',
           bottom: '0',

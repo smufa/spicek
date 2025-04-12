@@ -5,6 +5,7 @@ import { Analyze } from '../views/Analyze/Analyze';
 import { Record } from '../views/Record/Record';
 import { Login } from '../views/Auth/Login';
 import { Register } from '../views/Auth/Register';
+import Testing from '../views/Testing';
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: '/record',
         element: <Record />,
+      },
+      {
+        path: '/jan',
+        element: <Testing />,
       },
     ],
   },

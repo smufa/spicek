@@ -12,14 +12,21 @@ import {
 export class Session {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ nullable: false })
+  name: string;
+
+  @Column({ nullable: false })
+  description: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @Column({ nullable: true })
-  userAgent: string;
+  videoFileName: string;
 
   @Column({ nullable: true })
-  videoFileName: string;
+  durationMs: number;
 
   @ManyToOne(() => Users, (user) => user.sessions)
   @JoinColumn({ name: 'userId' })

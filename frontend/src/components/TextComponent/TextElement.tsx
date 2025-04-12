@@ -13,11 +13,11 @@ export interface TextElementProps {
   fillers: FillerTokens[];
 }
 
-const mergeTokensAndFillers = (
-  tokens: Token[],
-  fillers: FillerTokens[],
-): (Token | FillerTokens)[] => {
-  const data: (FillerTokens | Token)[] = [];
-};
+// const mergeTokensAndFillers = (
+//   tokens: Token[],
+//   fillers: FillerTokens[],
+// ): (Token | FillerTokens)[] => {
+//   const data: (FillerTokens | Token)[] = [];
+// };
 
 // export const TextElement = ({ fillers, tokens }: TextElementProps) => {};

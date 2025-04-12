@@ -6,9 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface UserRequestOut {
-  sub: number;
-  username: string;
-  iat: number;
-  exp: number;
-}
+export type SessionControllerCreateDefault = { [key: string]: unknown };

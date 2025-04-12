@@ -1,7 +1,6 @@
-import { Button, Drawer, Group, Paper, Slider, Stack } from '@mantine/core';
+import { Group, Paper, Slider, Stack } from '@mantine/core';
 import { LineChart } from '@mantine/charts';
-import { useDisclosure } from '@mantine/hooks';
-import { SessionCard } from '../../components/SessionCards/SessionCard';
+import { SessionDrawer } from '../../components/Sessions/SessionDrawer';
 
 const data = [
   {
@@ -37,54 +36,12 @@ const data = [
 ];
 
 export const Analyze = () => {
-  const [opened, { open, close, toggle }] = useDisclosure(false);
-
   return (
     <>
-      <Drawer
-        opened={opened}
-        onClose={close}
-        title="Recorded sessions"
-        size="md"
-      >
-        <Stack>
-          {/* TODO: @jan */}
-          <SessionCard
-            created={new Date()}
-            duration={5000}
-            title="Jan ti si cigan"
-          />
-          <SessionCard
-            created={new Date()}
-            duration={5000}
-            title="Jan ti si cigan"
-          />
-          <SessionCard
-            created={new Date()}
-            duration={5000}
-            title="Jan ti si cigan"
-          />
-          <SessionCard
-            created={new Date()}
-            duration={5000}
-            title="Jan ti si cigan"
-          />
-          <SessionCard
-            created={new Date()}
-            duration={5000}
-            title="Jan ti si cigan"
-          />
-          <SessionCard
-            created={new Date()}
-            duration={5000}
-            title="Jan ti si cigan"
-          />
-        </Stack>
-      </Drawer>
+      <SessionDrawer />
       <Stack h="100%" p="md" m="0">
         <Group w="100%" h="100%" gap="xl">
           <Paper flex={8} h="100%" withBorder p="md">
-            <Button onClick={toggle}>toggle drawer</Button>
             Video
           </Paper>
           <Paper flex={4} h="100%" withBorder p="md">

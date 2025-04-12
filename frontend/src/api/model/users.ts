@@ -5,10 +5,11 @@
  * WIP
  * OpenAPI spec version: 1.0
  */
+import type { Session } from './session';
 
-export interface UserRequestOut {
-  sub: number;
+export interface Users {
+  id: number;
   username: string;
-  iat: number;
-  exp: number;
+  password: string;
+  sessions: Session[];
 }

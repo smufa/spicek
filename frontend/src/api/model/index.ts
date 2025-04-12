@@ -7,6 +7,11 @@
  */
 
 export * from './accessTokenDto';
+export * from './createSessionDto';
+export * from './session';
+export * from './sessionControllerCreateDefault';
 export * from './signinDto';
 export * from './signupCreateDto';
+export * from './updateSessionDto';
 export * from './userRequestOut';
+export * from './users';

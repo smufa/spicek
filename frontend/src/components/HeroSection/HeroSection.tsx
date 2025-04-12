@@ -4,10 +4,16 @@ import './HeroSection.css';
 import { useNavigate } from 'react-router-dom';
 
 export function HeroSection() {
-
   const navigate = useNavigate();
   return (
-    <Container size="xl" className="hero-section" px={50} py={100} m="0" style={{ minWidth: '100%' }}>
+    <Container
+      size="xl"
+      className="hero-section"
+      px={50}
+      py={100}
+      m="0"
+      style={{ minWidth: '100%' }}
+    >
       <div className="hero-wrapper">
         <div className="hero-content">
           <Title component="h1" className="hero-title" size={48}>
@@ -26,7 +32,7 @@ export function HeroSection() {
             <Button
               component="a"
               onClick={() => {
-                navigate('/record');
+                navigate('/sessions');
               }}
               size="lg"
               rightSection={

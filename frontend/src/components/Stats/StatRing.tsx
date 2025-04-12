@@ -1,5 +1,4 @@
 import {
-  Center,
   Group,
   MantineColor,
   Paper,

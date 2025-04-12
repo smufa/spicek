@@ -7,6 +7,7 @@ import { Login } from '../views/Auth/Login';
 import { Register } from '../views/Auth/Register';
 import { ProtectedPath } from '../views/Auth/ProtectedPath';
 import MainTestingView from '../views/MainTestingView';
+import { SessionView } from '../components/Sessions/SessionView';
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +26,10 @@ export const router = createBrowserRouter([
         path: '/analyze/:id',
         element: <Analyze />,
       },
-
+      {
+        path: '/sessions',
+        element: <SessionView />,
+      },
       {
         path: '/main',
         element: <MainTestingView />,

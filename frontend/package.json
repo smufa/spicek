@@ -23,6 +23,7 @@
     "@nanostores/react": "^1.0.0",
     "@tabler/icons": "^3.31.0",
     "@tabler/icons-react": "^3.31.0",
+    "@tanstack/react-query": "^5.73.3",
     "dayjs": "^1.11.13",
     "nanostores": "^1.0.1",
     "react": "^19.0.0",

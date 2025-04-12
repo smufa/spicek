@@ -1,9 +1,11 @@
 import * as bcrypt from 'bcrypt';
+import { Session } from 'src/session/session.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -18,8 +20,8 @@ export class Users {
   @Column()
   password: string;
 
-  // @OneToMany(() => Transcript, (transcript) => transcript.createdBy)
-  // transcripts: Transcript[];
+  @OneToMany(() => Session, (session) => session.user)
+  sessions: Session[];
 
   @BeforeInsert()
   @BeforeUpdate()

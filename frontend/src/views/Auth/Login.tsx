@@ -12,9 +12,10 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
-import { useAuthControllerSignIn } from '../api/auth/auth';
+import { useAuthControllerSignIn } from '../../api/auth/auth';
+import { $currUser } from '../../global-store/userStore';
 
-export function Authentication() {
+export function Login() {
   const { mutateAsync } = useAuthControllerSignIn();
   const form = useForm({
     initialValues: {
@@ -47,6 +48,10 @@ export function Authentication() {
                     password: values.password,
                     username: values.email,
                   },
+                }).then((data) => {
+                  $currUser.set({
+                    accessToken: data.access_token,
+                  });
                 });
               })}
             >

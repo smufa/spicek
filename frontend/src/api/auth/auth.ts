@@ -132,7 +132,7 @@ export const authControllerSignIn = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<void>(
+  return customInstance<AccessTokenDto>(
     {
       url: `/auth/login`,
       method: 'POST',

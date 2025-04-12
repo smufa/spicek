@@ -1,3 +1,6 @@
 import { atom } from 'nanostores';
 
-export const $currUser = atom<unknown | null>(null);
+interface LoggedUser {
+  accessToken: string;
+}
+export const $currUser = atom<LoggedUser | null>(null);

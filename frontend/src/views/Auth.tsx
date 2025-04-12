@@ -9,19 +9,19 @@ import {
   Text,
   TextInput,
   Title,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { IconCircleKey } from "@tabler/icons-react";
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { IconCircleKey } from '@tabler/icons-react';
 
 export function Authentication() {
   const form = useForm({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
 
@@ -46,14 +46,14 @@ export function Authentication() {
                 label="Email"
                 placeholder="you@mantine.dev"
                 required
-                {...form.getInputProps("email")}
+                {...form.getInputProps('email')}
               />
               <PasswordInput
                 label="Password"
                 placeholder="Your password"
                 required
                 mt="md"
-                {...form.getInputProps("password")}
+                {...form.getInputProps('password')}
               />
 
               <Button fullWidth mt="xl" type="submit">

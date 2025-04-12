@@ -47,8 +47,6 @@ export function Authentication() {
                     password: values.password,
                     username: values.email,
                   },
-                }).then((user) => {
-                  const { accesToken } = user;
                 });
               })}
             >

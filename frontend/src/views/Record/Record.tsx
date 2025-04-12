@@ -297,7 +297,7 @@ export const Record = () => {
               <RingProgress
                 size={60}
                 thickness={4}
-                sections={[{ value: 100, color: 'blue' }]}
+                sections={[{ value: 100, color: 'red.6' }]}
                 label={
                   <Center>
                     <IconVideo size={20} />
@@ -319,7 +319,7 @@ export const Record = () => {
               <RingProgress
                 size={60}
                 thickness={4}
-                sections={[{ value: 100, color: 'green' }]}
+                sections={[{ value: 100, color: 'green.6' }]}
                 label={
                   <Center>
                     <IconCheck size={20} />
@@ -341,7 +341,7 @@ export const Record = () => {
               <RingProgress
                 size={60}
                 thickness={4}
-                sections={[{ value: 100, color: 'violet' }]}
+                sections={[{ value: 100, color: 'violet.6' }]}
                 label={
                   <Center>
                     <IconPlayerPlay size={20} />

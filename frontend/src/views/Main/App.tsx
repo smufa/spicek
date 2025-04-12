@@ -1,6 +1,7 @@
 import { Box } from '@mantine/core';
-import { Record } from '../Record/Record';
 import { HeroSection } from '../../components/HeroSection/HeroSection';
+import { FeaturesSection } from '../../components/FeaturesSection/FeaturesSection';
+import { HowItWorksSection } from '../../components/HowItWorksSection/HowItWorksSection';
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
         }}
       >
         <HeroSection />
-        <Record />
+        <FeaturesSection />
+        <HowItWorksSection />
+       
       </Box>
     </div>
   );

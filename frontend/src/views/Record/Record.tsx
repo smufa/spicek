@@ -4,14 +4,13 @@ import {
   Center,
   Group,
   Paper,
-  rem,
-  RingProgress,
+
   Stack,
   Title,
   Text,
 } from '@mantine/core';
 import {
-  IconCheck,
+ 
   IconPlayerPlay,
   IconRefresh,
   IconVideo,
@@ -19,6 +18,7 @@ import {
 } from '@tabler/icons-react';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { NotesEditor } from '../../components/NotesEditor/NotesEditor';
 
 export const Record = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -142,7 +142,7 @@ export const Record = () => {
 
   return (
     <Stack>
-      <Group justify="center" align="flex-start" id="record">
+      <Group justify="center" align="flex-start" id="record" p={80} style={{ minWidth: '100%' }}>
         <Paper
           withBorder
           p="md"
@@ -150,7 +150,8 @@ export const Record = () => {
           shadow="sm"
           style={{
             width: '100%',
-            maxWidth: rem(500),
+            height: '100%',
+            flex: 1,
           }}
         >
           <Stack gap="md">
@@ -162,7 +163,6 @@ export const Record = () => {
               style={{
                 position: 'relative',
                 width: '100%',
-                maxWidth: '450px',
                 margin: '0 auto',
                 aspectRatio: '4/3',
                 borderRadius: '8px',
@@ -279,14 +279,14 @@ export const Record = () => {
           </Stack>
         </Paper>
 
-        <Paper
+        {/* <Paper
           withBorder
           p="md"
           radius="md"
           shadow="sm"
           style={{
             width: '100%',
-            maxWidth: rem(500),
+            maxWidth: rem(400),
           }}
         >
           <Title order={3} mb="md">
@@ -297,7 +297,7 @@ export const Record = () => {
               <RingProgress
                 size={60}
                 thickness={4}
-                sections={[{ value: 100, color: 'blue' }]}
+                sections={[{ value: 100, color: 'red.6' }]}
                 label={
                   <Center>
                     <IconVideo size={20} />
@@ -319,7 +319,7 @@ export const Record = () => {
               <RingProgress
                 size={60}
                 thickness={4}
-                sections={[{ value: 100, color: 'green' }]}
+                sections={[{ value: 100, color: 'green.6' }]}
                 label={
                   <Center>
                     <IconCheck size={20} />
@@ -341,7 +341,7 @@ export const Record = () => {
               <RingProgress
                 size={60}
                 thickness={4}
-                sections={[{ value: 100, color: 'violet' }]}
+                sections={[{ value: 100, color: 'violet.6' }]}
                 label={
                   <Center>
                     <IconPlayerPlay size={20} />
@@ -359,7 +359,9 @@ export const Record = () => {
               </div>
             </Group>
           </Stack>
-        </Paper>
+        </Paper> */}
+
+        <NotesEditor />
       </Group>
     </Stack>
   );

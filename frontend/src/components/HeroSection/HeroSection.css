@@ -1,5 +1,5 @@
 .hero-section {
-  width: 100%;
+  
   padding: calc(var(--mantine-spacing-xl) * 1.5) 0;
   padding-inline: 0;
   background: linear-gradient(
@@ -17,7 +17,6 @@
 }
 
 .hero-content {
-  max-width: 90%;
   margin: 0 auto;
   align-items: center;
 }

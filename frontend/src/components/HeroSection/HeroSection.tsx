@@ -1,18 +1,21 @@
-import { ArrowRight } from "lucide-react";
-import { Button, Title, Text, Container, rem } from "@mantine/core";
-import "./HeroSection.css";
+import { ArrowRight } from 'lucide-react';
+import { Button, Title, Text, Container, rem } from '@mantine/core';
+import './HeroSection.css';
+import { useNavigate } from 'react-router-dom';
 
 export function HeroSection() {
+
+  const navigate = useNavigate();
   return (
-    <Container size="xl" px="md" className="hero-section">
+    <Container size="xl" className="hero-section" px={50} py={100} m="0" style={{ minWidth: '100%' }}>
       <div className="hero-wrapper">
         <div className="hero-content">
           <Title component="h1" className="hero-title" size={48}>
-            Master Your{" "}
+            Master Your{' '}
             <span className="hero-highlight">Presentation Skills</span> with AI
           </Title>
 
-          <Text className="hero-description" m="lg" mx={50} size="lg">
+          <Text c="#696969" ta="center" fz="lg" mx="auto" mt="md" maw={700}>
             Our AI-powered tool analyzes your speech, body language, and
             delivery to give you personalized feedback. Record your practice
             sessions and get actionable insights to become a more confident and
@@ -22,7 +25,9 @@ export function HeroSection() {
           <div className="hero-buttons">
             <Button
               component="a"
-              href="#record"
+              onClick={() => {
+                navigate('/record');
+              }}
               size="lg"
               rightSection={
                 <ArrowRight style={{ width: rem(16), height: rem(16) }} />

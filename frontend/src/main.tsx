@@ -21,7 +21,7 @@ const theme = createTheme({
 export const queryClient = new QueryClient({
   defaultOptions: {
     mutations: {
-      onSettled(data, error) {
+      onSettled(_, error) {
         const axError = error as AxiosError;
 
         if (!axError) return;

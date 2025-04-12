@@ -1,37 +1,22 @@
-import { Button, Group, Stack } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { useNavigate } from "react-router-dom";
+import { Box } from "@mantine/core";
+import { Record } from "../Record/Record";
+import { HeroSection } from "../../components/HeroSection/HeroSection";
 
 function App() {
-  const navigate = useNavigate();
   return (
-    <Stack>
-      <Group>
-        <Button
-          onClick={() => {
-            navigate("/record");
-          }}
-        >
-          Record
-        </Button>
-        <Button
-          onClick={() => {
-            navigate("/analyze");
-          }}
-        >
-          Analyze
-        </Button>
-        <Button
-          onClick={() => {
-            notifications.show({
-              message: "im a notif",
-            });
-          }}
-        >
-          Push notification
-        </Button>
-      </Group>
-    </Stack>
+    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+      <Box
+        p="md"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--mantine-spacing-xl)",
+        }}
+      >
+        <HeroSection />
+        <Record />
+      </Box>
+    </div>
   );
 }
 

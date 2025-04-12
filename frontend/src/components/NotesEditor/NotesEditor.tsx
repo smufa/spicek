@@ -8,7 +8,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
-import { Paper, Title, Button, Group, rem } from '@mantine/core';
+import { Paper, Title, Button, Group } from '@mantine/core';
 import { IconLink, IconPhoto } from '@tabler/icons-react';
 import { useState } from 'react';
 import './NotesEditor.css';
@@ -69,8 +69,8 @@ export function NotesEditor() {
       radius="md"
       style={{
         width: '100%',
-        maxWidth: rem(600),
-        minHeight: "500px",
+        flex: 1,
+        height: '100%',
       }}
     >
       <Title order={5} mb="sm">
@@ -154,7 +154,7 @@ export function NotesEditor() {
           border: '1px solid #dee2e6',
           borderRadius: '4px',
           padding: '8px',
-          height: '350px', // Fixed height
+          maxHeight: "400px", // Set a max height for the editor
           overflowY: 'auto', // Vertical scrolling
           flexGrow: 1,
         }}

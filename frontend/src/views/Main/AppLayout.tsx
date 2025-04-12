@@ -6,7 +6,7 @@ import { $currUser } from '../../global-store/userStore';
 export const AppLayout = () => {
   const usr = useStore($currUser);
   return (
-    <Stack h="100vh" w="100%" p="md">
+    <Stack h="100vh" w="100%">
       <Outlet />
       <Badge
         m="sm"

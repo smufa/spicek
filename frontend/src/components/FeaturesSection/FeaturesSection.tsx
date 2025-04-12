@@ -56,7 +56,7 @@ export function FeaturesSection() {
   ]
 
   return (
-    <Container size="xl" py={80} id="features" className="features-section" mx={50}>
+    <Container size="xl" p={80} id="features" className="features-section" style={{ minWidth: '100%' }}>
       <Title ta="center" className="section-title">
         Key Features That <span className="features-highlight">Transform</span> Your Presentations
       </Title>

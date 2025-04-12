@@ -8,3 +8,4 @@
 
 export * from './signinDto';
 export * from './signupCreateDto';
+export * from './userRequestOut';

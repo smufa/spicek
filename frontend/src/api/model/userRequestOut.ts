@@ -6,7 +6,9 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface SignupCreateDto {
+export interface UserRequestOut {
+  sub: string;
   username: string;
-  password: string;
+  iat: number;
+  exp: number;
 }

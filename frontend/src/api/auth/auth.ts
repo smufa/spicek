@@ -16,7 +16,7 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import type { SigninDto, SignupCreateDto } from '../model';
+import type { SigninDto, SignupCreateDto, UserRequestOut } from '.././model';
 
 import { customInstance } from '.././mutator/custom-instance';
 import type { ErrorType } from '.././mutator/custom-instance';
@@ -44,7 +44,7 @@ export const authControllerSignUp = (
 };
 
 export const getAuthControllerSignUpMutationOptions = <
-  TError = ErrorType<unknown>,
+  TError = ErrorType<void>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -85,13 +85,13 @@ export type AuthControllerSignUpMutationResult = NonNullable<
   Awaited<ReturnType<typeof authControllerSignUp>>
 >;
 export type AuthControllerSignUpMutationBody = SignupCreateDto;
-export type AuthControllerSignUpMutationError = ErrorType<unknown>;
+export type AuthControllerSignUpMutationError = ErrorType<void>;
 
 /**
  * @summary Register
  */
 export const useAuthControllerSignUp = <
-  TError = ErrorType<unknown>,
+  TError = ErrorType<void>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -132,7 +132,7 @@ export const authControllerSignIn = (
 };
 
 export const getAuthControllerSignInMutationOptions = <
-  TError = ErrorType<unknown>,
+  TError = ErrorType<void>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -173,13 +173,13 @@ export type AuthControllerSignInMutationResult = NonNullable<
   Awaited<ReturnType<typeof authControllerSignIn>>
 >;
 export type AuthControllerSignInMutationBody = SigninDto;
-export type AuthControllerSignInMutationError = ErrorType<unknown>;
+export type AuthControllerSignInMutationError = ErrorType<void>;
 
 /**
  * @summary Login
  */
 export const useAuthControllerSignIn = <
-  TError = ErrorType<unknown>,
+  TError = ErrorType<void>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -206,7 +206,7 @@ export const authControllerGetProfile = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal,
 ) => {
-  return customInstance<void>(
+  return customInstance<unknown>(
     { url: `/auth/profile`, method: 'GET', signal },
     options,
   );
@@ -218,7 +218,7 @@ export const getAuthControllerGetProfileQueryKey = () => {
 
 export const getAuthControllerGetProfileQueryOptions = <
   TData = Awaited<ReturnType<typeof authControllerGetProfile>>,
-  TError = ErrorType<unknown>,
+  TError = ErrorType<UserRequestOut>,
 >(options?: {
   query?: UseQueryOptions<
     Awaited<ReturnType<typeof authControllerGetProfile>>,
@@ -246,7 +246,7 @@ export const getAuthControllerGetProfileQueryOptions = <
 export type AuthControllerGetProfileQueryResult = NonNullable<
   Awaited<ReturnType<typeof authControllerGetProfile>>
 >;
-export type AuthControllerGetProfileQueryError = ErrorType<unknown>;
+export type AuthControllerGetProfileQueryError = ErrorType<UserRequestOut>;
 
 /**
  * @summary Get user profile
@@ -254,7 +254,7 @@ export type AuthControllerGetProfileQueryError = ErrorType<unknown>;
 
 export function useAuthControllerGetProfile<
   TData = Awaited<ReturnType<typeof authControllerGetProfile>>,
-  TError = ErrorType<unknown>,
+  TError = ErrorType<UserRequestOut>,
 >(options?: {
   query?: UseQueryOptions<
     Awaited<ReturnType<typeof authControllerGetProfile>>,

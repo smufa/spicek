@@ -7,5 +7,6 @@
  */
 
 export interface SigninDto {
-  [key: string]: unknown;
+  username: string;
+  password: string;
 }

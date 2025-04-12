@@ -12,8 +12,10 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
+import { useAuthControllerSignIn } from '../api/auth/auth';
 
 export function Authentication() {
+  const { mutate } = useAuthControllerSignIn();
   const form = useForm({
     initialValues: {
       email: '',
@@ -40,6 +42,7 @@ export function Authentication() {
             <form
               onSubmit={form.onSubmit(async (values) => {
                 console.log(values);
+                mutate({});
               })}
             >
               <TextInput

@@ -25,12 +25,6 @@ export function Authentication() {
     },
   });
 
-  // // redirect if logged in
-  // const { user } = useUser();
-  // if (user) {
-  //   return <Navigate to="/"></Navigate>;
-  // }
-
   return (
     <Box h="100vh" w="100vw">
       <Center h="100vh" w="100%">

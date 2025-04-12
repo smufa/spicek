@@ -1,15 +1,26 @@
 import { Button, Group, Stack } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
 
 function App() {
+  const navigate = useNavigate();
   return (
     <Stack>
       <Group>
-        <Stack>
-          {/* <Badge variant="light">{user?.id}</Badge> */}
-          <Button>logout</Button>
-        </Stack>
-
+        <Button
+          onClick={() => {
+            navigate("/record");
+          }}
+        >
+          Record
+        </Button>
+        <Button
+          onClick={() => {
+            navigate("/analyze");
+          }}
+        >
+          Analyze
+        </Button>
         <Button
           onClick={() => {
             notifications.show({

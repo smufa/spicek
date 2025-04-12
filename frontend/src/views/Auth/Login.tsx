@@ -6,6 +6,7 @@ import {
   Group,
   Paper,
   PasswordInput,
+  Stack,
   Text,
   TextInput,
   Title,
@@ -14,7 +15,7 @@ import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
 import { useAuthControllerSignIn } from '../../api/auth/auth';
 import { $currUser } from '../../global-store/userStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export function Login() {
   const { mutateAsync } = useAuthControllerSignIn();
@@ -26,9 +27,9 @@ export function Login() {
       password: '',
     },
 
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-    },
+    // validate: {
+    //   email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+    // },
   });
 
   return (
@@ -73,9 +74,21 @@ export function Login() {
                 {...form.getInputProps('password')}
               />
 
-              <Button fullWidth mt="xl" type="submit">
-                Sign in
-              </Button>
+              <Stack gap="lg">
+                <Button fullWidth mt="xl" type="submit">
+                  Sign in
+                </Button>
+
+                <Button
+                  size="sm"
+                  component={Link}
+                  to="/register"
+                  variant="subtle"
+                  fullWidth
+                >
+                  Don't have an account? Register now
+                </Button>
+              </Stack>
             </form>
           </Paper>
         </Container>

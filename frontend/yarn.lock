@@ -437,6 +437,11 @@
   resolved "https://registry.yarnpkg.com/@mantine/store/-/store-7.17.4.tgz#8930a29da9d9d1a59f4d7fe36e4fa805c11bcb16"
   integrity sha512-a/EecHPtYVxhu3oMX9uTymGolmOBWxW8Qs4fLCjiazEJbS1ScI4lS71GK/SuOa2rGuuOJkaotpyritbx3paIRg==
 
+"@nanostores/persistent@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@nanostores/persistent/-/persistent-1.0.0.tgz#ac766a2d5287ad2759034463440f1b68c96649fe"
+  integrity sha512-iuucWTxcxSLwHvcxBTIAwofDc+KO7cw5EiQklAltJX6Ynx/CKTecOCUG76kF42yNnCZZQcMeuIcl99DkxekIig==
+
 "@nanostores/react@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@nanostores/react/-/react-1.0.0.tgz#5804f925f36e6926c43bc25277b93131644676ed"

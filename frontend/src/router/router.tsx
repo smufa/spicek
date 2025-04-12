@@ -5,11 +5,16 @@ import { Analyze } from '../views/Analyze/Analyze';
 import { Record } from '../views/Record/Record';
 import { Login } from '../views/Auth/Login';
 import { Register } from '../views/Auth/Register';
+import { ProtectedPath } from '../views/Auth/ProtectedPath';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <AppLayout />,
+    element: (
+      <ProtectedPath redirectUrl="/login">
+        <AppLayout />
+      </ProtectedPath>
+    ),
     children: [
       {
         path: '/',

@@ -20,6 +20,7 @@
     "@mantine/notifications": "^7.17.4",
     "@mantine/nprogress": "^7.17.4",
     "@mantine/spotlight": "^7.17.4",
+    "@nanostores/persistent": "^1.0.0",
     "@nanostores/react": "^1.0.0",
     "@tabler/icons": "^3.31.0",
     "@tabler/icons-react": "^3.31.0",

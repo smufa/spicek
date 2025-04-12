@@ -7,6 +7,7 @@ import { router } from "./router/router";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/spotlight/styles.css";
+import "@mantine/charts/styles.css";
 import { Notifications } from "@mantine/notifications";
 
 const theme = createTheme({});

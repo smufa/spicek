@@ -37,6 +37,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Login' })
   @ApiOkResponse({
     description: 'Login successful',
+    type: AccessTokenDto,
   })
   @HttpCode(HttpStatus.OK)
   @Post('login')

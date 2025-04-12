@@ -25,10 +25,6 @@ export function Login() {
       email: '',
       password: '',
     },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-    },
   });
 
   return (

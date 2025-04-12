@@ -15,10 +15,11 @@ export function HowItWorksSection() {
   return (
     <Container
       size="xl"
-      py={80}
+      p={80}
       m={0}
       id="how-it-works"
       className="how-it-works-section"
+      style={{ minWidth: '100%' }}
     >
       <Title ta="center" className="section-title">
         How It <span className="how-highlight">Works</span>

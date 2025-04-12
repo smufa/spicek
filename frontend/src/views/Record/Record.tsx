@@ -4,7 +4,6 @@ import {
   Center,
   Group,
   Paper,
-  rem,
 
   Stack,
   Title,
@@ -143,7 +142,7 @@ export const Record = () => {
 
   return (
     <Stack>
-      <Group justify="center" align="flex-start" id="record" mx="lg">
+      <Group justify="center" align="flex-start" id="record" p={80} style={{ minWidth: '100%' }}>
         <Paper
           withBorder
           p="md"
@@ -151,8 +150,8 @@ export const Record = () => {
           shadow="sm"
           style={{
             width: '100%',
-            height: '500px',
-            maxWidth: rem(500),
+            height: '100%',
+            flex: 1,
           }}
         >
           <Stack gap="md">
@@ -164,7 +163,6 @@ export const Record = () => {
               style={{
                 position: 'relative',
                 width: '100%',
-                maxWidth: '450px',
                 margin: '0 auto',
                 aspectRatio: '4/3',
                 borderRadius: '8px',

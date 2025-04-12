@@ -1,5 +1,5 @@
 export class UserRequestOut {
-  sub: string;
+  sub: number;
   username: string;
   iat: number;
   exp: number;

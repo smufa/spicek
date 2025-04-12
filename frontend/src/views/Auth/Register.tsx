@@ -6,6 +6,7 @@ import {
   Group,
   Paper,
   PasswordInput,
+  Stack,
   Text,
   TextInput,
   Title,
@@ -13,7 +14,7 @@ import {
 import { useForm } from '@mantine/form';
 import { IconCircleKey } from '@tabler/icons-react';
 import { useAuthControllerSignUp } from '../../api/auth/auth';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
 
 export function Register() {
@@ -25,9 +26,9 @@ export function Register() {
       password: '',
     },
 
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-    },
+    // validate: {
+    //   email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+    // },
   });
 
   return (
@@ -73,9 +74,21 @@ export function Register() {
                 {...form.getInputProps('password')}
               />
 
-              <Button fullWidth mt="xl" type="submit">
-                Sign in
-              </Button>
+              <Stack gap="lg">
+                <Button fullWidth mt="xl" type="submit">
+                  Sign in
+                </Button>
+
+                <Button
+                  size="sm"
+                  component={Link}
+                  to="/login"
+                  variant="subtle"
+                  fullWidth
+                >
+                  Already have an account? Log in
+                </Button>
+              </Stack>
             </form>
           </Paper>
         </Container>

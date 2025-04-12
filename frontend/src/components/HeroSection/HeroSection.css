@@ -1,76 +1,77 @@
 .hero-section {
-   
-    padding: calc(var(--mantine-spacing-xl) * 1.5) 0;
-    background: linear-gradient(
-      to bottom, 
-      var(--mantine-color-body), 
-      var(--mantine-color-gray-light)
-    );
-  }
-  
-  .hero-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .hero-content {
-    max-width: 90%;
-    margin: 0 auto;
-    align-items: center;
-  }
-  
+  width: 100%;
+  padding: calc(var(--mantine-spacing-xl) * 1.5) 0;
+  padding-inline: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--mantine-color-body),
+    var(--mantine-color-gray-light)
+  );
+}
+
+.hero-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 90%;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.hero-title {
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 1.2;
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.hero-highlight {
+  position: relative;
+  display: inline-block;
+}
+
+.hero-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: var(--mantine-color-cyan-6);
+  opacity: 1;
+  z-index: -1;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: var(--mantine-spacing-md);
+  justify-content: center;
+  margin-top: var(--mantine-spacing-lg);
+}
+
+/* Responsive styles */
+@media (min-width: 48em) {
   .hero-title {
-    font-weight: 900;
-    font-size: 36px;
-    line-height: 1.2;
-    margin-bottom: var(--mantine-spacing-md);
+    font-size: 44px;
   }
-  
-  .hero-highlight {
-    position: relative;
-    display: inline-block;
+
+  .hero-description {
+    font-size: var(--mantine-font-size-lg);
   }
-  
-  .hero-highlight::after {
-    content: '';
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    width: 100%;
-    height: 10px;
-    background-color: var(--mantine-color-cyan-6);
-    opacity: 1;
-    z-index: -1;
+}
+
+@media (min-width: 62em) {
+  .hero-title {
+    font-size: 52px;
   }
-  
-  .hero-buttons {
-    display: flex;
-    gap: var(--mantine-spacing-md);
-    justify-content: center;
-    margin-top: var(--mantine-spacing-lg);
+}
+
+@media (min-width: 75em) {
+  .hero-title {
+    font-size: 60px;
   }
-  
-  /* Responsive styles */
-  @media (min-width: 48em) {
-    .hero-title {
-      font-size: 44px;
-    }
-    
-    .hero-description {
-      font-size: var(--mantine-font-size-lg);
-    }
-  }
-  
-  @media (min-width: 62em) {
-    .hero-title {
-      font-size: 52px;
-    }
-  }
-  
-  @media (min-width: 75em) {
-    .hero-title {
-      font-size: 60px;
-    }
-  }
+}

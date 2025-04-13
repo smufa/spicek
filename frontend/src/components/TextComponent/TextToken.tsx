@@ -13,17 +13,17 @@ export const TextToken = ({
   return (
     <Text
       size="xl"
-      // px="2px"
+      px="2px"
       style={{
         display: 'inline',
         cursor: 'pointer',
-        transitionDuration: '0.1s',
+        transitionDuration: '0.2s',
       }}
       bg={active ? 'dark' : undefined}
       c={active ? 'white' : undefined}
       onClick={() => onClick(token.start_ms + 10)}
     >
-      {token.text}
+      {token.text.toString() + ' '}
     </Text>
   );
 };

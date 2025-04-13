@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
         element: <MainTestingView />,
       },
       {
-        path: '/record',
+        path: '/record/:id',
         element: <Record />,
       },
     ],

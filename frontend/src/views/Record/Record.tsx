@@ -17,7 +17,7 @@ import {
   IconVideoOff,
 } from '@tabler/icons-react';
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { NotesEditor } from '../../components/NotesEditor/NotesEditor';
 
 export const Record = () => {
@@ -31,6 +31,7 @@ export const Record = () => {
   const chunksRef = useRef<BlobPart[]>([]);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigate = useNavigate();
+  const { id: sess } = useParams<{ id: string }>();
 
   useEffect(() => {
     return () => {
@@ -124,7 +125,7 @@ export const Record = () => {
 
   const handleSubmit = () => {
     // In a real application, you would upload the video to your server here
-    navigate('/analyze', {
+    navigate(`/analyze/${sess}`, {
       state: {
         videoUrl: recordedBlob ? URL.createObjectURL(recordedBlob) : null,
       },

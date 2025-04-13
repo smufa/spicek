@@ -6,7 +6,7 @@ import {
 } from '../api/sessions/sessions';
 import { SessionDrawer } from '../components/Sessions/SessionDrawer';
 import Playback from './Playback';
-import Testing from './NEW/NewRecPage';
+// import Testing from './NEW/NewRecPage';
 const MainTestingView = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
 
@@ -82,7 +82,7 @@ const MainTestingView = () => {
   return (
     <>
       {/* <SessionDrawer data={data || []} /> */}
-      <Testing session={session} />
+      {/* <Testing session={session} /> */}
     </>
   );
 };

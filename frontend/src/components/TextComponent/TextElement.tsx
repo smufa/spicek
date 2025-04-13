@@ -3,7 +3,7 @@ import { FillerToken } from './FillerToken';
 import { isTranscriptionToken, isFillerToken } from './utils';
 import { TextToken } from './TextToken';
 import { TranscriptToken } from '../../api/model';
-import { mergeTokensByWhitespace } from './convUtils';
+import { mergeSubwordTokens } from './convUtils';
 
 export interface TextElementProps {
   tokens: TranscriptToken[];
@@ -31,19 +31,13 @@ export const TextElement = ({
   setTime,
   timeMs,
 }: TextElementProps) => {
-  const mergedTokens = mergeTokensAndFillers(
-    mergeTokensByWhitespace(tokens),
-    fillers,
-  ).sort((a, b) => (a.start_ms + a.end_ms) / 2 - (b.start_ms + b.end_ms) / 2);
+  const tokens2 = mergeSubwordTokens(tokens);
+  const mergedTokens = mergeTokensAndFillers(tokens2, fillers).sort(
+    (a, b) => (a.start_ms + a.end_ms) / 2 - (b.start_ms + b.end_ms) / 2,
+  );
 
   return (
-    <Box
-      style={
-        {
-          // justifyContent: 'space-between',
-        }
-      }
-    >
+    <Box>
       {mergedTokens.map((token) => {
         if (isTranscriptionToken(token)) {
           return (

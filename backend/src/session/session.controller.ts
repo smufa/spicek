@@ -174,6 +174,13 @@ export class SessionController {
     void this.svc.tts(+id);
   }
 
+  @Post(':id/filler-test')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'DEV: Filler test' })
+  devFillerTest(@Param('id') id: string) {
+    void this.svc.devFiller(+id);
+  }
+
   @Post(':id/upload')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Upload data at the end of a session' })

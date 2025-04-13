@@ -10,6 +10,7 @@ import {
 import { PoseFrameDto } from './dto/add-session-data.dto';
 import { Transcript } from 'src/tts/tts.dto';
 import { BadPostureEvent } from 'src/posture/posture.dto';
+import { FillerDto } from 'src/filler/filler.dto';
 
 type UploadState = 'fresh' | 'video' | 'done';
 type TTSState = 'un-processed' | 'processing' | 'done' | 'error';
@@ -61,4 +62,7 @@ export class Session {
 
   @Column({ nullable: true, type: 'jsonb', default: [] })
   postureData: BadPostureEvent[] = []; // Array of bad posture events
+
+  @Column({ nullable: true, type: 'jsonb' })
+  fillerDto: FillerDto;
 }

@@ -78,6 +78,53 @@ export class SessionService {
     }
   }
 
+  async fillerBackground(session: Session) {
+    try {
+      if (!session.wavFileName)
+        throw new NotFoundException('Assertion: Session has no wav file name');
+
+      const filler = await this.fillerService.uploadWavFile(
+        session.wavFileName,
+      );
+
+      session.fillerDto = filler;
+
+      await this.sessionRepository.save(session);
+
+      this.logger.log(
+        `Filler test completed for session ${session.id}. JSON: ${JSON.stringify(filler)}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `Error during filler processing for session ${session.id}: ${error.message}`,
+      );
+    }
+  }
+
+  async devFiller(sessionId: number) {
+    this.logger.log(`Starting filler test for session ${sessionId}...`);
+
+    const session = await this.sessionRepository.findOne({
+      where: { id: sessionId },
+    });
+
+    if (!session) throw new NotFoundException('Session not found');
+
+    if (!session.wavFileName) {
+      throw new NotFoundException('Session has no wav file name');
+    }
+
+    const filler = await this.fillerService.uploadWavFile(session.wavFileName);
+
+    session.fillerDto = filler;
+
+    await this.sessionRepository.save(session);
+
+    this.logger.log(
+      `Filler test completed for session ${sessionId}. JSON: ${JSON.stringify(filler)}`,
+    );
+  }
+
   async addSessionData(
     id: number,
     data: UploadPoseDataDto,
@@ -128,6 +175,7 @@ export class SessionService {
 
       // Run this in the background
       void this.ttsBg(session);
+      void this.fillerBackground(session);
 
       session.postureData = this.postureService.analyzeBadPostureEvents(
         session.poseData,

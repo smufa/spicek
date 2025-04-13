@@ -30,6 +30,7 @@ const Testing = ({ session }: Props) => {
   const poseData = useRef<
     { timestamp: number; landmarks: NormalizedLandmarkList }[]
   >([]);
+  const recordingStartTimeRef = useRef<number>(0);
   const isCollectingPoseData = useRef(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
@@ -70,8 +71,11 @@ const Testing = ({ session }: Props) => {
 
       // Collect pose data if recording
       if (isCollectingPoseData.current == true && results.poseLandmarks) {
+        const currentTime = Date.now();
+        const millisFromStart = currentTime - recordingStartTimeRef.current;
+
         poseData.current.push({
-          timestamp: Date.now(),
+          timestamp: millisFromStart, // Store as milliseconds from start
           landmarks: JSON.parse(JSON.stringify(results.poseLandmarks)),
         });
       }
@@ -173,6 +177,9 @@ const Testing = ({ session }: Props) => {
       poseData.current = [];
       setUploadStatus('');
 
+      // Set recording start time
+      recordingStartTimeRef.current = Date.now();
+
       // Start collecting pose data
       isCollectingPoseData.current = true;
 
@@ -250,7 +257,6 @@ const Testing = ({ session }: Props) => {
     if (videoSize < 100) {
       console.error('Video size is too small:', videoSize);
       setIsUploading(false);
-
       return;
     }
 
@@ -325,7 +331,7 @@ const Testing = ({ session }: Props) => {
         </button>
 
         <div className="pose-data-info">
-          {isCollectingPoseData ? (
+          {isCollectingPoseData.current ? (
             <span>Recording pose data: {poseData.current.length} frames</span>
           ) : isUploading ? (
             <span>Uploading... Please wait.</span>

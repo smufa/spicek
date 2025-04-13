@@ -7,16 +7,24 @@
  */
 
 export * from './accessTokenDto';
+export * from './badPostureEvent';
 export * from './createSessionDto';
+export * from './disfluency';
+export * from './disfluencyToken';
+export * from './fillerDto';
 export * from './normalizedLandmarkDto';
 export * from './poseDataCollectionDto';
 export * from './poseFrameDto';
 export * from './session';
 export * from './sessionControllerCreateDefault';
+export * from './sessionTtsState';
 export * from './sessionUploadState';
 export * from './sesssionVideoDataDto';
 export * from './signinDto';
 export * from './signupCreateDto';
+export * from './transcript';
+export * from './transcriptToken';
+export * from './transcription';
 export * from './updateSessionDto';
 export * from './uploadPoseDataDto';
 export * from './userRequestOut';

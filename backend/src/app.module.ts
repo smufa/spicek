@@ -4,9 +4,21 @@ import { DatabaseModule } from './database/database.module';
 import { EnvModule } from './env/env.module';
 import { UsersModule } from './users/users.module';
 import { SessionModule } from './session/session.module';
+import { TtsModule } from './tts/tts.module';
+import { PostureModule } from './posture/posture.module';
+import { FillerModule } from './filler/filler.module';
 
 @Module({
-  imports: [EnvModule, AuthModule, UsersModule, DatabaseModule, SessionModule],
+  imports: [
+    EnvModule,
+    AuthModule,
+    UsersModule,
+    DatabaseModule,
+    SessionModule,
+    TtsModule,
+    PostureModule,
+    FillerModule,
+  ],
   controllers: [],
   providers: [],
 })

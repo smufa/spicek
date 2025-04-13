@@ -2,6 +2,7 @@ import {
   Box,
   Center,
   Group,
+  Loader,
   LoadingOverlay,
   Paper,
   ScrollArea,
@@ -24,9 +25,12 @@ export const Analyze = () => {
   const searchParams = useParams();
   const [overlay, setOverlay] = useState(true);
 
-  const { data, isLoading: isLoadingStats } = useSessionControllerFindOne(
-    searchParams.id || '',
-  );
+  const {
+    data,
+    refetch,
+    isLoading: isLoadingStats,
+  } = useSessionControllerFindOne(searchParams.id || '');
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const { time, setTime, pause, play, seek, playState } =
     useTimeManager(videoRef);
@@ -54,8 +58,24 @@ export const Analyze = () => {
       convertDisfluency(data.fillerDto.disfluency)) ||
     [];
 
-  if (!data) {
-    return <div>Loading...</div>;
+  // every one second while there is no fillerDto refetch the data
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!data?.fillerDto) {
+        refetch();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!data || !data.fillerDto) {
+    return (
+      <Center h="100vh" w={'100%'}>
+        <Loader size="xl" variant="dots" />
+      </Center>
+    );
   }
 
   return (

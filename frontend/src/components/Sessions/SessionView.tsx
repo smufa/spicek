@@ -1,11 +1,13 @@
 import {
+  Affix,
   Alert,
   Button,
-  Card,
+
   Center,
   LoadingOverlay,
   SimpleGrid,
   Stack,
+ 
 } from '@mantine/core';
 
 import { SessionCard } from '../SessionCards/SessionCard';
@@ -30,17 +32,15 @@ export const SessionView = () => {
     <Stack>
       <LoadingOverlay visible={isLoading} />
       {(data?.length ?? 0) > 0 && !createNew && (
-        <Card withBorder shadow="xl">
-          <Center h="100%">
-            <Button
-              onClick={() => setCreateNew(true)}
-              variant="gradient"
-              size="xl"
-            >
-              Create New Session
-            </Button>
-          </Center>
-        </Card>
+        <Affix position={{ bottom: 20, right: 20 }} pr={60}>
+         
+            <Center h="100%">
+              <Button onClick={() => setCreateNew(true)} size="xl">
+                Create New Session
+              </Button>
+            </Center>
+         
+        </Affix>
       )}
 
       {(data?.length == 0 || createNew) && (

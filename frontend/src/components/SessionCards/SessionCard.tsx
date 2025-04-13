@@ -14,7 +14,7 @@ export const SessionCard = ({ session }: { session: Session }) => {
           {new Date(createdAt).toLocaleDateString()}
           <Badge size="sm"> {(durationMs! / (1000 * 60)).toFixed(2)} min</Badge>
         </Group>
-        <Text size="sm" c="#696969">
+        <Text size="sm" c="#696969" style={{ overflowY: 'auto', maxHeight: '50px' }}>
           {description}
         </Text>
         <Group>

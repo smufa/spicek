@@ -10,7 +10,7 @@ import {
   Stack,
 } from '@mantine/core';
 import { IconManFilled, IconTextScan2 } from '@tabler/icons-react';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { StatsRing } from '../../components/Stats/StatRing';
 import { TextElement } from '../../components/TextComponent/TextElement';
@@ -18,7 +18,7 @@ import { Controlls } from '../../components/VideoTools/Controlls';
 import useTimeManager from '../../components/VideoTools/TimeTracker';
 import { useSessionControllerFindOne } from '../../api/sessions/sessions';
 import { convertDisfluency } from '../../components/TextComponent/convUtils';
-import VideoPlayer from '../../components/VideoTools/VideoPlayer';
+import VideoPoseOverlay from '../../components/VideoTools/Voverlay';
 
 const datac = [
   {
@@ -61,6 +61,8 @@ export const Analyze = () => {
     searchParams.id || '',
   );
 
+  console.log({ data });
+
   // const { data: videoURL, isLoading: loadingURL } =
   //   useSessionControllerGetSessionVideo(searchParams.id || '');
 
@@ -92,6 +94,8 @@ export const Analyze = () => {
     label: disf.fillerType,
   }));
 
+  const [overlay, setOverlay] = useState(true);
+
   return (
     <Stack
       h="100vh"
@@ -118,16 +122,26 @@ export const Analyze = () => {
         >
           <Center h="100%">
             <Stack h="100%">
-              <VideoPlayer
+              {/* <VideoPlayer
                 videoRef={videoRef}
                 url={`${import.meta.env.VITE_BACKEND_API}/sessions/${searchParams.id}/video`}
                 // url={`/video.mp4`}
-              />
+              /> */}
+              {data?.poseData && (
+                <VideoPoseOverlay
+                  videoRef={videoRef}
+                  overlay={overlay}
+                  poses={data?.poseData}
+                  url={`${import.meta.env.VITE_BACKEND_API}/sessions/${searchParams.id}/video`}
+                />
+              )}
               <Controlls
                 pause={pause}
                 play={play}
                 state={playState}
                 timeMs={time}
+                overlay={overlay}
+                setOverlay={setOverlay}
               />
             </Stack>
           </Center>
@@ -153,6 +167,15 @@ export const Analyze = () => {
             <Paper flex={4} h="100%" withBorder p="md">
               <ScrollArea h="100%" type="always">
                 {/* <Box h="350vh"></Box> */}
+                {data?.ttsData?.tokens == undefined && (
+                  <LoadingOverlay
+                    visible
+                    loaderProps={{
+                      children:
+                        'Full transcript analysis in progress... come back later',
+                    }}
+                  />
+                )}
                 {data && (
                   <TextElement
                     fillers={convertedDisfluency}

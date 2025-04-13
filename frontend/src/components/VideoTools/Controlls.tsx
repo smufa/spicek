@@ -13,9 +13,18 @@ interface ControllsProps {
   pause: () => void;
   state: PlayState;
   timeMs: number;
+  overlay: boolean;
+  setOverlay: (arg: boolean) => void;
 }
 
-export const Controlls = ({ pause, play, state, timeMs }: ControllsProps) => {
+export const Controlls = ({
+  pause,
+  play,
+  state,
+  timeMs,
+  overlay,
+  setOverlay,
+}: ControllsProps) => {
   return (
     <Card withBorder style={{}} radius="1rem" w="">
       <Group justify="space-between">
@@ -38,10 +47,11 @@ export const Controlls = ({ pause, play, state, timeMs }: ControllsProps) => {
             <IconPlayerPauseFilled size={24} />
           </ActionIcon>
         </Group>
-
         <Switch
           size="md"
           color="dark"
+          checked={overlay} // Make sure 'overlay' is used for checked status
+          onChange={(e) => setOverlay(e.currentTarget.checked)} // Set 'overlay' value based on the switch state
           offLabel={
             <IconVideo
               size={16}

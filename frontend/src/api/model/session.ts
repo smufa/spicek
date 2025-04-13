@@ -10,6 +10,8 @@ import type { SessionTtsState } from './sessionTtsState';
 import type { Users } from './users';
 import type { PoseFrameDto } from './poseFrameDto';
 import type { Transcript } from './transcript';
+import type { BadPostureEvent } from './badPostureEvent';
+import type { FillerDto } from './fillerDto';
 
 export interface Session {
   id: number;
@@ -30,4 +32,6 @@ export interface Session {
   userId: number;
   poseData: PoseFrameDto[];
   ttsData: Transcript;
+  postureData: BadPostureEvent[];
+  fillerDto: FillerDto;
 }

@@ -1,40 +1,14 @@
-import {
-  Alert,
-  Button,
-  LoadingOverlay,
-  SimpleGrid,
-  Stack,
-} from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Alert, Button, LoadingOverlay, Stack } from '@mantine/core';
+
 import { SessionCard } from '../SessionCards/SessionCard';
-import {
-  useSessionControllerCreate,
-  useSessionControllerFindAll,
-} from '../../api/sessions/sessions';
+import { useSessionControllerFindAll } from '../../api/sessions/sessions';
+import { CreateSessionComponent } from './CreateRecording';
+import { useState } from 'react';
 
 export const SessionView = () => {
-  const {
-    data,
-    isLoading,
-    error,
-    refetch: refetchSessions,
-  } = useSessionControllerFindAll();
+  const { data, isLoading, error } = useSessionControllerFindAll();
 
-  console.log({ data });
-
-  const { mutateAsync: createSessionApi } = useSessionControllerCreate();
-
-  const createDumySession = async () => {
-    createSessionApi({
-      data: {
-        description: 'test1',
-        name: 'test',
-      },
-    }).then((data) => {
-      // navigate(`/main/${data.id}`);
-      refetchSessions();
-    });
-  };
+  const [createNew, setCreateNew] = useState(false);
 
   if (error) {
     return (
@@ -45,24 +19,18 @@ export const SessionView = () => {
   }
 
   return (
-    <Stack pos="relative">
+    <Stack pos="relative" style={{ width: '100%' }} p={80}>
       <LoadingOverlay visible={isLoading} />
-      <SimpleGrid cols={4}>
-        {data?.length == 0 && (
-          <Alert title="No data">
-            <Stack>
-              <span>No previous sessions recorded.</span>
-              <Button onClick={createDumySession}></Button>
-              <Button component={Link} to="/record">
-                Record now
-              </Button>
-            </Stack>
-          </Alert>
-        )}
-        {data &&
-          data.length > 0 &&
-          data.map((session) => <SessionCard session={session} />)}
-      </SimpleGrid>
+      {(data?.length ?? 0) > 0 && !createNew && (
+        <Button onClick={() => setCreateNew(true)}>Create New Session</Button>
+      )}
+      {data?.length == 0 || createNew ? (
+        <CreateSessionComponent first={!createNew} />
+      ) : (
+        data &&
+        data.length > 0 &&
+        data.map((session) => <SessionCard session={session} />)
+      )}
     </Stack>
   );
 };

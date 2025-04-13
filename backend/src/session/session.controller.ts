@@ -9,9 +9,9 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   Request,
   Res,
-  StreamableFile,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -27,7 +27,7 @@ import {
 } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { diskStorage } from 'multer';
-import { join } from 'path';
+import path, { join, extname } from 'path';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RequestWithUAT, UserRequest } from 'src/common/auth-types';
 import {
@@ -201,7 +201,8 @@ export class SessionController {
   @Get(':id/video')
   async getSessionVideo(
     @Param('id') sessionId: string,
-    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request,
+    @Res() response: Response,
   ) {
     const session = await this.sessionRepository.findOne({
       where: { id: +sessionId },
@@ -211,17 +212,56 @@ export class SessionController {
       throw new NotFoundException('Session not found');
     }
 
-    if (!fs.existsSync(session?.videoFileName || '')) {
+    const videoPath = session.videoFileName || '';
+
+    if (!fs.existsSync(videoPath)) {
       throw new NotFoundException('Video not found');
     }
 
-    const file = fs.createReadStream(session.videoFileName || '');
+    // Get video stats (size, etc.)
+    const stat = fs.statSync(videoPath);
+    const fileSize = stat.size;
+    const videoExtension = extname(videoPath).toLowerCase();
 
-    response.set({
-      'Content-Type': 'video/webm',
-      'Content-Disposition': `inline; filename="$video.webm"`,
-    });
+    // Determine content type based on file extension
+    let contentType = 'video/webm'; // Default
 
-    return new StreamableFile(file);
+    // Parse Range header
+    const range = (request.headers as any).range;
+
+    if (range) {
+      // Handle range request (partial content for seeking)
+      const parts = range.replace(/bytes=/, '').split('-');
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+      const chunkSize = end - start + 1;
+
+      // Create read stream for specific range
+      const file = fs.createReadStream(videoPath, { start, end });
+
+      // Set appropriate headers for range response
+      response.writeHead(206, {
+        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': chunkSize,
+        'Content-Type': contentType,
+        'Content-Disposition': `inline; filename="video${videoExtension}"`,
+      });
+
+      // Pipe the file stream to response
+      file.pipe(response);
+    } else {
+      // Handle normal request (entire file)
+      response.writeHead(200, {
+        'Content-Length': fileSize,
+        'Content-Type': contentType,
+        'Accept-Ranges': 'bytes',
+        'Content-Disposition': `inline; filename="video${videoExtension}"`,
+      });
+
+      // Create read stream for entire file
+      const file = fs.createReadStream(videoPath);
+      file.pipe(response);
+    }
   }
 }

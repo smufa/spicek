@@ -111,14 +111,12 @@ export const Analyze = () => {
                   color: 'lime',
                   icon: <IconManFilled size={25} />,
                   label: 'Posture alerts',
-                  // progress: 32,
                   stats: data?.postureData.length.toString() || '/',
                 },
                 {
                   color: 'lime',
                   icon: <IconTextScan2 size={20} />,
                   label: 'Filler words',
-                  // progress: 32,
                   stats: convertedDisfluency.length.toString(),
                 },
               ]}
@@ -159,18 +157,6 @@ export const Analyze = () => {
                 max={parseInt(data?.durationMs as unknown as string) || 0}
               />
             </Box>
-            {/* <LineChart
-              w="100%"
-              h={150}
-              data={datac}
-              withYAxis={false}
-              withXAxis={false}
-              dataKey="date"
-              strokeWidth={4}
-              series={[{ name: 'Apples', color: 'indigo.6' }]}
-              curveType="linear"
-            /> */}
-
             <Chart session={data} />
           </Paper>
         </Group>

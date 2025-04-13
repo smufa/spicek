@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Box,
   Center,
   Group,
@@ -9,9 +10,13 @@ import {
   Slider,
   Stack,
 } from '@mantine/core';
-import { IconManFilled, IconTextScan2 } from '@tabler/icons-react';
+import {
+  IconChevronCompactLeft,
+  IconManFilled,
+  IconTextScan2,
+} from '@tabler/icons-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { StatsRing } from '../../components/Stats/StatRing';
 import { TextElement } from '../../components/TextComponent/TextElement';
 import { Controlls } from '../../components/VideoTools/Controlls';
@@ -58,17 +63,21 @@ export const Analyze = () => {
       convertDisfluency(data.fillerDto.disfluency)) ||
     [];
 
-  // every one second while there is no fillerDto refetch the data
+  // Set up polling only once on mount
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (!data?.fillerDto) {
-        refetch();
-      }
-    }, 1000);
+    if (!data) return;
 
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!data.fillerDto) {
+      const timeout = setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [data]); // Empty dependency array = run once
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const navigate = useNavigate();
 
   if (!data || !data.fillerDto) {
     return (
@@ -85,6 +94,19 @@ export const Analyze = () => {
         overflow: 'hidden',
       }}
     >
+      <ActionIcon
+        pos="absolute"
+        top={10}
+        right={10}
+        size="lg"
+        variant="subtle"
+        onClick={() => {
+          navigate('/sessions');
+        }}
+      >
+        <IconChevronCompactLeft />
+      </ActionIcon>
+
       <LoadingOverlay visible={isLoadingStats} />
       <Stack
         h="100%"

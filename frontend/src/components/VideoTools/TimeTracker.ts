@@ -38,6 +38,7 @@ const useTimeManager = (
   const pause = () => videoRef.current?.pause();
   const seek = (milliseconds: number) => {
     if (videoRef.current) {
+      console.log(milliseconds / 1000);
       videoRef.current.currentTime = milliseconds / 1000;
     }
   };

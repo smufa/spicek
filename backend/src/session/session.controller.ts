@@ -93,7 +93,9 @@ export class SessionController {
   @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string, @Request() req: RequestWithUAT) {
-    return this.svc.findOne(+id, req.user.sub);
+    const a = +id;
+    this.logger.debug('id', a);
+    return this.svc.findOne(a, req.user.sub);
   }
 
   @Post(':id/upload/video')

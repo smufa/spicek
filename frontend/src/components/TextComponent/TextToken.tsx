@@ -1,22 +1,19 @@
 import { Text } from '@mantine/core';
-import { Token } from './TextElement';
-
-export interface TranscriptionToken extends Token {
-  textContent: string;
-}
+import { TranscriptToken } from '../../api/model';
 
 export const TextToken = ({
   token,
   onClick,
   active,
 }: {
-  token: TranscriptionToken;
+  token: TranscriptToken;
   onClick: (timestamp: number) => void;
   active: boolean;
 }) => {
   return (
     <Text
-      px="2px"
+      size="xl"
+      // px="2px"
       style={{
         display: 'inline',
         cursor: 'pointer',
@@ -24,9 +21,9 @@ export const TextToken = ({
       }}
       bg={active ? 'dark' : undefined}
       c={active ? 'white' : undefined}
-      onClick={() => onClick(token.timeFromMs + 10)}
+      onClick={() => onClick(token.start_ms + 10)}
     >
-      {token.textContent}
+      {token.text}
     </Text>
   );
 };

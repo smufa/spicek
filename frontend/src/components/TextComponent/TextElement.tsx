@@ -2,24 +2,26 @@ import { Box } from '@mantine/core';
 import { FillerToken } from './FillerToken';
 import { isTranscriptionToken, isFillerToken } from './utils';
 import { TextToken } from './TextToken';
-
-export interface Token {
-  timeFromMs: number;
-  timeToMs: number;
-}
+import { TranscriptToken } from '../../api/model';
+import { mergeTokensByWhitespace } from './convUtils';
 
 export interface TextElementProps {
-  tokens: Token[];
+  tokens: TranscriptToken[];
   fillers: FillerToken[];
   setTime: (timeMs: number) => void;
   timeMs: number;
 }
 
+export interface Token {
+  start_ms: number;
+  end_ms: number;
+}
+
 const mergeTokensAndFillers = (
-  tokens: Token[],
+  tokens: TranscriptToken[],
   fillers: FillerToken[],
 ): Token[] => {
-  const data: Token[] = tokens.concat(fillers);
+  const data: Token[] = (tokens as Token[]).concat(fillers);
   return data;
 };
 
@@ -29,9 +31,10 @@ export const TextElement = ({
   setTime,
   timeMs,
 }: TextElementProps) => {
-  const mergedTokens = mergeTokensAndFillers(tokens, fillers).sort(
-    (a, b) => (a.timeFromMs + a.timeToMs) / 2 - (b.timeFromMs + b.timeToMs) / 2,
-  );
+  const mergedTokens = mergeTokensAndFillers(
+    mergeTokensByWhitespace(tokens),
+    fillers,
+  ).sort((a, b) => (a.start_ms + a.end_ms) / 2 - (b.start_ms + b.end_ms) / 2);
 
   return (
     <Box
@@ -45,8 +48,8 @@ export const TextElement = ({
         if (isTranscriptionToken(token)) {
           return (
             <TextToken
-              key={token.timeFromMs}
-              active={token.timeFromMs < timeMs && timeMs < token.timeToMs}
+              key={token.start_ms + '' + token.text}
+              active={token.start_ms < timeMs && timeMs < token.end_ms}
               token={token}
               onClick={setTime}
             />
@@ -58,7 +61,7 @@ export const TextElement = ({
               active={false}
               token={token}
               onClick={setTime}
-              key={token.timeFromMs}
+              key={token.start_ms + token.fillerType}
             />
           );
         }

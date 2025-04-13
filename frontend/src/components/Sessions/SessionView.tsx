@@ -1,4 +1,12 @@
-import { Alert, Button, LoadingOverlay, Stack } from '@mantine/core';
+import {
+  Alert,
+  Button,
+  Card,
+  Center,
+  LoadingOverlay,
+  SimpleGrid,
+  Stack,
+} from '@mantine/core';
 
 import { SessionCard } from '../SessionCards/SessionCard';
 import { useSessionControllerFindAll } from '../../api/sessions/sessions';
@@ -19,18 +27,32 @@ export const SessionView = () => {
   }
 
   return (
-    <Stack pos="relative" style={{ width: '100%' }} p={80}>
+    <Stack>
       <LoadingOverlay visible={isLoading} />
       {(data?.length ?? 0) > 0 && !createNew && (
-        <Button onClick={() => setCreateNew(true)}>Create New Session</Button>
+        <Card withBorder shadow="xl">
+          <Center h="100%">
+            <Button
+              onClick={() => setCreateNew(true)}
+              variant="gradient"
+              size="xl"
+            >
+              Create New Session
+            </Button>
+          </Center>
+        </Card>
       )}
-      {data?.length == 0 || createNew ? (
+
+      {(data?.length == 0 || createNew) && (
         <CreateSessionComponent first={!createNew} />
-      ) : (
-        data &&
-        data.length > 0 &&
-        data.map((session) => <SessionCard session={session} />)
       )}
+
+      <SimpleGrid pos="relative" style={{ width: '100%' }} p={80} cols={3}>
+        {data &&
+          !createNew &&
+          data.length > 0 &&
+          data.map((session) => <SessionCard session={session} />)}
+      </SimpleGrid>
     </Stack>
   );
 };

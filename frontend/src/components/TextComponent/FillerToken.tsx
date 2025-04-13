@@ -1,9 +1,10 @@
 import { Tooltip, Badge } from '@mantine/core';
-import { Token } from './TextElement';
 import { getFillerColor, getFillerDescription } from './utils';
 
-export interface FillerToken extends Token {
+export interface FillerToken {
   fillerType: 'PW' | 'FP' | 'RP' | 'RV' | 'RS';
+  start_ms: number;
+  end_ms: number;
 }
 
 export const FillerToken = ({
@@ -23,15 +24,15 @@ export const FillerToken = ({
       }}
     >
       <Badge
-        variant={active ? 'light' : 'outline'}
+        variant={active ? 'filled' : 'light'}
         style={{
           cursor: 'pointer',
         }}
+        size="lg"
         radius="sm"
         mx="2px"
-        // py="lg"
         color={active ? 'cyan' : getFillerColor(token.fillerType)}
-        onClick={() => onClick(token.timeFromMs + 10)}
+        onClick={() => onClick(token.start_ms + 10)}
       >
         {token.fillerType}
       </Badge>

@@ -6,8 +6,10 @@
  * OpenAPI spec version: 1.0
  */
 import type { SessionUploadState } from './sessionUploadState';
+import type { SessionTtsState } from './sessionTtsState';
 import type { Users } from './users';
 import type { PoseFrameDto } from './poseFrameDto';
+import type { Transcript } from './transcript';
 
 export interface Session {
   id: number;
@@ -17,11 +19,15 @@ export interface Session {
   /** @nullable */
   videoFileName: string | null;
   /** @nullable */
+  wavFileName: string | null;
+  /** @nullable */
   videoSize: number | null;
   /** @nullable */
   durationMs: number | null;
   uploadState: SessionUploadState;
+  ttsState: SessionTtsState;
   user: Users;
   userId: number;
   poseData: PoseFrameDto[];
+  ttsData: Transcript;
 }

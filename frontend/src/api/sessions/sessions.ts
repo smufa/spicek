@@ -721,6 +721,92 @@ export const useSessionControllerUploadVideo = <
   return useMutation(mutationOptions, queryClient);
 };
 /**
+ * @summary DEV: TTS test
+ */
+export const sessionControllerDevTtsTest = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<void>(
+    { url: `/sessions/${id}/tts-test`, method: 'POST', signal },
+    options,
+  );
+};
+
+export const getSessionControllerDevTtsTestMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof sessionControllerDevTtsTest>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof sessionControllerDevTtsTest>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ['sessionControllerDevTtsTest'];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof sessionControllerDevTtsTest>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return sessionControllerDevTtsTest(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SessionControllerDevTtsTestMutationResult = NonNullable<
+  Awaited<ReturnType<typeof sessionControllerDevTtsTest>>
+>;
+
+export type SessionControllerDevTtsTestMutationError = ErrorType<void>;
+
+/**
+ * @summary DEV: TTS test
+ */
+export const useSessionControllerDevTtsTest = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof sessionControllerDevTtsTest>>,
+      TError,
+      { id: string },
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof sessionControllerDevTtsTest>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions =
+    getSessionControllerDevTtsTestMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+/**
  * @summary Upload data at the end of a session
  */
 export const sessionControllerUploadData = (

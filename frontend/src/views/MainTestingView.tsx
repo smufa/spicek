@@ -73,6 +73,7 @@ const MainTestingView = () => {
         <p>{session.description}</p>
         <p>{session.videoFileName}</p>
         <p>{session.durationMs}</p>
+        <p>{JSON.stringify(session.ttsData)}</p>
         <Playback session={session} />
       </Container>
     );

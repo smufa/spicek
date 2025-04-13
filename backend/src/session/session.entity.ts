@@ -8,8 +8,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { PoseFrameDto } from './dto/add-session-data.dto';
+import { Transcript } from 'src/tts/tts.dto';
 
 type UploadState = 'fresh' | 'video' | 'done';
+type TTSState = 'un-processed' | 'processing' | 'done' | 'error';
 
 @Entity()
 export class Session {
@@ -28,6 +30,9 @@ export class Session {
   @Column({ nullable: true, type: String })
   videoFileName: string | null;
 
+  @Column({ nullable: true, type: String })
+  wavFileName: string | null;
+
   @Column({ nullable: true, type: 'bigint' })
   videoSize: number | null;
 
@@ -36,6 +41,9 @@ export class Session {
 
   @Column({ type: String, nullable: false, default: 'fresh' })
   uploadState: UploadState;
+
+  @Column({ type: String, nullable: false, default: 'un-processed' })
+  ttsState: TTSState;
 
   @ManyToOne(() => Users, (user) => user.sessions)
   @JoinColumn({ name: 'userId' })
@@ -46,4 +54,7 @@ export class Session {
 
   @Column({ type: 'json', nullable: true })
   poseData: PoseFrameDto[];
+
+  @Column({ nullable: true, type: 'jsonb' })
+  ttsData: Transcript;
 }

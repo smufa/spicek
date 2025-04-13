@@ -4,9 +4,10 @@ import { SessionController } from './session.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/users/users.entity';
 import { Session } from './session.entity';
+import { TtsModule } from 'src/tts/tts.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Users, Session])],
+  imports: [TtsModule, TypeOrmModule.forFeature([Users, Session])],
   controllers: [SessionController],
   providers: [SessionService],
 })

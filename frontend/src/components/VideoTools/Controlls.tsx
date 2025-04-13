@@ -26,7 +26,16 @@ export const Controlls = ({
   setOverlay,
 }: ControllsProps) => {
   return (
-    <Card withBorder style={{}} radius="1rem" w="">
+    <Card
+      withBorder
+      style={{}}
+      radius="1rem"
+      w=""
+      pos="absolute"
+      bottom={10}
+      left={10}
+      shadow="sm"
+    >
       <Group justify="space-between">
         <Group>
           <ActionIcon

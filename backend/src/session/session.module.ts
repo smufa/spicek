@@ -6,11 +6,13 @@ import { Users } from 'src/users/users.entity';
 import { SessionController } from './session.controller';
 import { Session } from './session.entity';
 import { SessionService } from './session.service';
+import { FillerModule } from 'src/filler/filler.module';
 
 @Module({
   imports: [
     TtsModule,
     PostureModule,
+    FillerModule,
     TypeOrmModule.forFeature([Users, Session]),
   ],
   controllers: [SessionController],

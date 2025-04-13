@@ -10,6 +10,7 @@ import { UpdateSessionDto } from './dto/update-session.dto';
 import { Session } from './session.entity';
 import { TtsService } from 'src/tts/tts.service';
 import { PostureService } from 'src/posture/posture.service';
+import { FillerService } from 'src/filler/filler.service';
 
 @Injectable()
 export class SessionService {
@@ -25,6 +26,8 @@ export class SessionService {
     private ttsService: TtsService,
 
     private postureService: PostureService,
+
+    private fillerService: FillerService,
   ) {}
 
   async ttsBg(session: Session) {

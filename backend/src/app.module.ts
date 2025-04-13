@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { SessionModule } from './session/session.module';
 import { TtsModule } from './tts/tts.module';
 import { PostureModule } from './posture/posture.module';
+import { FillerModule } from './filler/filler.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PostureModule } from './posture/posture.module';
     SessionModule,
     TtsModule,
     PostureModule,
+    FillerModule,
   ],
   controllers: [],
   providers: [],

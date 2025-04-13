@@ -158,6 +158,7 @@ export const CreateSessionComponent = ({ first }: { first: boolean }) => {
         title="No previous sessions"
         color="gray"
         radius="md"
+        className='no-sessions'
         style={{
           width: '100%',
           maxWidth: '600px',
@@ -170,6 +171,7 @@ export const CreateSessionComponent = ({ first }: { first: boolean }) => {
             flexDirection: 'column',
             gap: '1rem',
             alignItems: 'center',
+         
           }}
         >
           <Text size="sm" ta="center">

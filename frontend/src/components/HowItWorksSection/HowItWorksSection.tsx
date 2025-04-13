@@ -39,7 +39,7 @@ export function HowItWorksSection() {
           >
             <Text c="#696969" fz="md">
               Use our platform to record yourself delivering your presentation.
-              You can use your webcam or upload an existing video.
+              You can use your webcam and microphone to capture both video and audio.
             </Text>
           </Timeline.Item>
 
@@ -64,8 +64,7 @@ export function HowItWorksSection() {
           >
             <Text c="#696969" fz="md">
               Get detailed, actionable feedback on specific aspects of your
-              presentation, including speaking pace, filler words, posture,
-              gestures, and eye contact.
+              presentation, including speaking pace, filler words, posture and gestures.
             </Text>
 
             <Group mt="md" mb="md">

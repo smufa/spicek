@@ -39,7 +39,7 @@ export function FeaturesSection() {
       icon: <Video style={{ width: rem(24), height: rem(24) }} />,
       title: "Posture Detection",
       description:
-        "Our AI analyzes your body language, gestures, and eye contact to help you present with confidence and authority.",
+        "Our AI analyzes your body language, gestures to help you present with confidence and authority.",
     },
     {
       icon: <BarChart2 style={{ width: rem(24), height: rem(24) }} />,
@@ -62,8 +62,7 @@ export function FeaturesSection() {
       </Title>
 
       <Text c="#696969" ta="center" fz="lg" mx="auto" mt="md" maw={700}>
-        Our comprehensive toolkit provides everything you need to elevate your presentation skills from good to
-        exceptional.
+        Our comprehensive toolkit provides everything you need to practice and improve your presentation skills.
       </Text>
 
       <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing={50} mt={50}>

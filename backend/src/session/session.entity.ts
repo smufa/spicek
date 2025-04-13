@@ -52,7 +52,7 @@ export class Session {
   @Column()
   userId: number;
 
-  @Column({ type: 'json', nullable: true })
+  @Column({ type: 'jsonb', nullable: true })
   poseData: PoseFrameDto[];
 
   @Column({ nullable: true, type: 'jsonb' })

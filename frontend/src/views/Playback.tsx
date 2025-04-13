@@ -60,8 +60,8 @@ const Playback = ({ session }: Props) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // Find the appropriate pose data frame based on video timestamp
-        const videoTime = video.currentTime * 1000; // Convert to milliseconds
+        // Use video time in milliseconds directly for matching with pose data
+        const videoTimeMs = video.currentTime * 1000; // Convert seconds to milliseconds
 
         if (session.poseData && session.poseData.length > 0) {
           // Find the closest frame in poseData to the current video time
@@ -69,11 +69,8 @@ const Playback = ({ session }: Props) => {
           let minDiff = Infinity;
 
           for (let i = 0; i < session.poseData.length; i++) {
-            const diff = Math.abs(
-              session.poseData[i].timestamp -
-                session.poseData[0].timestamp -
-                videoTime,
-            );
+            // Now timestamp is already milliseconds from start, so we can compare directly
+            const diff = Math.abs(session.poseData[i].timestamp - videoTimeMs);
             if (diff < minDiff) {
               minDiff = diff;
               bestFrameIndex = i;
@@ -182,7 +179,8 @@ const Playback = ({ session }: Props) => {
         <div className="pose-info">
           {session.poseData && session.poseData.length > 0 && (
             <span>
-              Frame: {currentFrame + 1} / {session.poseData.length}
+              Frame: {currentFrame + 1} / {session.poseData.length} | Time:{' '}
+              {Math.round(session.poseData[currentFrame]?.timestamp || 0)}ms
             </span>
           )}
         </div>

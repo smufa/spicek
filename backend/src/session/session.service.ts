@@ -33,9 +33,7 @@ export class SessionService {
 
       await this.sessionRepository.save(session);
 
-      this.logger.log(
-        `TTS test completed for session ${session.id}. JSON: ${JSON.stringify(transcript)}`,
-      );
+      this.logger.log(`TTS test completed for session ${session.id}.`);
     } catch (error) {
       this.logger.error(
         `Error during TTS processing for session ${session.id}: ${error.message}`,

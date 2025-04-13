@@ -24,24 +24,15 @@ export const Analyze = () => {
   const searchParams = useParams();
   const [overlay, setOverlay] = useState(true);
 
-  // const { data: videoUrl, isLoading: isLoadingVideo } =useSessionControllerGetSessionVideo(searchParams.id || '');
   const { data, isLoading: isLoadingStats } = useSessionControllerFindOne(
     searchParams.id || '',
   );
-
-  console.log({ data });
-
-  // const { data: videoURL, isLoading: loadingURL } =
-  //   useSessionControllerGetSessionVideo(searchParams.id || '');
-
   const videoRef = useRef<HTMLVideoElement>(null);
-  // Use the custom hook, passing the video ref.
   const { time, pause, play, seek, playState } = useTimeManager(videoRef);
 
-  // Handler to skip ahead by 5 seconds.
   const setTimeCb = useCallback(
     (timeMs: number) => {
-      seek(timeMs); // Increase current time by 5000 milliseconds.
+      seek(timeMs);
     },
     [seek],
   );
@@ -81,11 +72,6 @@ export const Analyze = () => {
         >
           <Center h="100%">
             <Stack h="100%">
-              {/* <VideoPlayer
-                videoRef={videoRef}
-                url={`${import.meta.env.VITE_BACKEND_API}/sessions/${searchParams.id}/video`}
-                // url={`/video.mp4`}
-              /> */}
               {data?.poseData && (
                 <VideoPoseOverlay
                   videoRef={videoRef}

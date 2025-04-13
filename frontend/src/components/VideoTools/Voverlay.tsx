@@ -26,7 +26,7 @@ const VideoPoseOverlay: React.FC<VideoPoseOverlayProps> = ({
   videoRef,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number>(0);
 
   useEffect(() => {
     const video = videoRef.current;

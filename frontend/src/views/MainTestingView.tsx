@@ -6,7 +6,6 @@ import {
 } from '../api/sessions/sessions';
 import { SessionDrawer } from '../components/Sessions/SessionDrawer';
 import Testing from './Testing';
-import { Box } from 'lucide-react';
 import Playback from './Playback';
 
 const MainTestingView = () => {

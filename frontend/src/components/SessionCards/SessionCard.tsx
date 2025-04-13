@@ -8,7 +8,7 @@ export const SessionCard = ({ session }: { session: Session }) => {
       <Stack>
         <Group>
           {new Date(createdAt).toLocaleDateString()}
-          <Badge size="sm"> {(durationMs / (1000 * 60)).toFixed(2)} min</Badge>
+          <Badge size="sm"> {(durationMs! / (1000 * 60)).toFixed(2)} min</Badge>
         </Group>
         <Text size="sm" c="dimmed">
           {description}

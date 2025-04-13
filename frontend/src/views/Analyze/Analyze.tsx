@@ -1,3 +1,4 @@
+import { LineChart } from '@mantine/charts';
 import {
   Box,
   Center,
@@ -7,17 +8,22 @@ import {
   Slider,
   Stack,
 } from '@mantine/core';
-import { LineChart } from '@mantine/charts';
-import { SessionDrawer } from '../../components/Sessions/SessionDrawer';
+import {
+  IconClockBolt,
+  IconManFilled,
+  IconTextScan2,
+} from '@tabler/icons-react';
+import { useCallback, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { StatsRing } from '../../components/Stats/StatRing';
 import { TextElement } from '../../components/TextComponent/TextElement';
 import {
   fillerTokens,
   transcriptionTokens,
 } from '../../components/TextComponent/dummy';
-import VideoPlayer from '../../components/VideoTools/VideoPlayer';
-import { useCallback, useRef } from 'react';
-import useTimeManager from '../../components/VideoTools/TimeTracker';
 import { Controlls } from '../../components/VideoTools/Controlls';
+import useTimeManager from '../../components/VideoTools/TimeTracker';
+import VideoPlayer from '../../components/VideoTools/VideoPlayer';
 
 const data = [
   {
@@ -53,6 +59,9 @@ const data = [
 ];
 
 export const Analyze = () => {
+  const searchParams = useParams();
+  console.log(searchParams.id);
+
   const videoRef = useRef<HTMLVideoElement>(null);
   // Use the custom hook, passing the video ref.
   const { time, pause, play, seek, playState } = useTimeManager(videoRef);
@@ -72,7 +81,7 @@ export const Analyze = () => {
         overflow: 'hidden',
       }}
     >
-      <SessionDrawer />
+      {/* <SessionDrawer /> */}
       <Stack
         h="100%"
         p="md"
@@ -100,17 +109,44 @@ export const Analyze = () => {
               />
             </Stack>
           </Center>
-          <Paper flex={4} h="100%" withBorder p="md">
-            <ScrollArea h="100%" type="always">
-              {/* <Box h="350vh"></Box> */}
-              <TextElement
-                fillers={fillerTokens}
-                tokens={transcriptionTokens}
-                setTime={setTimeCb}
-                timeMs={time}
-              />
-            </ScrollArea>
-          </Paper>
+          <Stack h="100%" flex={1}>
+            <StatsRing
+              data={[
+                {
+                  color: 'lime',
+                  icon: <IconManFilled size={25} />,
+                  label: 'Posture alerts',
+                  // progress: 32,
+                  stats: '55',
+                },
+                {
+                  color: 'dark',
+                  icon: <IconClockBolt size={20}></IconClockBolt>,
+                  label: 'Cadence match',
+                  progress: 18,
+                  stats: '55',
+                },
+                {
+                  color: 'lime',
+                  icon: <IconTextScan2 size={20} />,
+                  label: 'Filler words',
+                  // progress: 32,
+                  stats: '55',
+                },
+              ]}
+            />
+            <Paper flex={4} h="100%" withBorder p="md">
+              <ScrollArea h="100%" type="always">
+                {/* <Box h="350vh"></Box> */}
+                <TextElement
+                  fillers={fillerTokens}
+                  tokens={transcriptionTokens}
+                  setTime={setTimeCb}
+                  timeMs={time}
+                />
+              </ScrollArea>
+            </Paper>
+          </Stack>
         </Group>
         <Group w="100%" gap="xl">
           <Paper w="100%">
@@ -130,9 +166,10 @@ export const Analyze = () => {
             </Box>
             <LineChart
               w="100%"
-              h={200}
+              h={150}
               data={data}
               withYAxis={false}
+              withXAxis={false}
               dataKey="date"
               strokeWidth={4}
               series={[

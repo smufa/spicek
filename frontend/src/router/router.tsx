@@ -5,9 +5,9 @@ import { Analyze } from '../views/Analyze/Analyze';
 import { Record } from '../views/Record/Record';
 import { Login } from '../views/Auth/Login';
 import { Register } from '../views/Auth/Register';
-import Testing from '../views/Testing';
 import { ProtectedPath } from '../views/Auth/ProtectedPath';
 import MainTestingView from '../views/MainTestingView';
+import { SessionView } from '../components/Sessions/SessionView';
 
 export const router = createBrowserRouter([
   {
@@ -23,8 +23,12 @@ export const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: '/analyze',
+        path: '/analyze/:id',
         element: <Analyze />,
+      },
+      {
+        path: '/sessions',
+        element: <SessionView />,
       },
       {
         path: '/main',
@@ -37,10 +41,6 @@ export const router = createBrowserRouter([
       {
         path: '/record',
         element: <Record />,
-      },
-      {
-        path: '/jan',
-        element: <Testing />,
       },
     ],
   },

@@ -55,7 +55,7 @@ export const queryClient = new QueryClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <MantineProvider theme={theme}>
+      <MantineProvider theme={theme} forceColorScheme="light">
         <Notifications />
         {/* <ModalsProvider modals={mantineModals}> */}
         <RouterProvider router={router} />

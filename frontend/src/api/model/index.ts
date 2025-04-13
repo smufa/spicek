@@ -8,6 +8,7 @@
 
 export * from './accessTokenDto';
 export * from './badPostureEvent';
+export * from './bucket';
 export * from './createSessionDto';
 export * from './disfluency';
 export * from './disfluencyToken';

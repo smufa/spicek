@@ -35,10 +35,10 @@ export class Session {
   @Column({ nullable: true, type: String })
   wavFileName: string | null;
 
-  @Column({ nullable: true, type: 'bigint' })
+  @Column({ nullable: true, type: 'float' })
   videoSize: number | null;
 
-  @Column({ nullable: true, type: 'bigint' })
+  @Column({ nullable: true, type: 'float' })
   durationMs: number | null;
 
   @Column({ type: String, nullable: false, default: 'fresh' })

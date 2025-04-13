@@ -1,4 +1,3 @@
-import { LineChart } from '@mantine/charts';
 import {
   Box,
   Center,
@@ -18,43 +17,12 @@ import { Controlls } from '../../components/VideoTools/Controlls';
 import useTimeManager from '../../components/VideoTools/TimeTracker';
 import { useSessionControllerFindOne } from '../../api/sessions/sessions';
 import { convertDisfluency } from '../../components/TextComponent/convUtils';
+import Chart from './Chart';
 import VideoPoseOverlay from '../../components/VideoTools/Voverlay';
-
-const datac = [
-  {
-    date: 'Mar 22',
-    Apples: 2890,
-    Oranges: 2338,
-    Tomatoes: 2452,
-  },
-  {
-    date: 'Mar 23',
-    Apples: 2756,
-    Oranges: 2103,
-    Tomatoes: 2402,
-  },
-  {
-    date: 'Mar 24',
-    Apples: 3322,
-    Oranges: 986,
-    Tomatoes: 1821,
-  },
-  {
-    date: 'Mar 25',
-    Apples: 3470,
-    Oranges: 2108,
-    Tomatoes: 2809,
-  },
-  {
-    date: 'Mar 26',
-    Apples: 3129,
-    Oranges: 1726,
-    Tomatoes: 2290,
-  },
-];
 
 export const Analyze = () => {
   const searchParams = useParams();
+  const [overlay, setOverlay] = useState(true);
 
   // const { data: videoUrl, isLoading: isLoadingVideo } =useSessionControllerGetSessionVideo(searchParams.id || '');
   const { data, isLoading: isLoadingStats } = useSessionControllerFindOne(
@@ -83,18 +51,9 @@ export const Analyze = () => {
       convertDisfluency(data.fillerDto.disfluency)) ||
     [];
 
-  const postureMarks =
-    data?.postureData.map((pos) => ({
-      value: pos.startTime,
-      label: pos.issue,
-    })) || [];
-
-  const disfluencyMarks = convertedDisfluency.map((disf) => ({
-    value: disf.start_ms,
-    label: disf.fillerType,
-  }));
-
-  const [overlay, setOverlay] = useState(true);
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Stack
@@ -192,7 +151,6 @@ export const Analyze = () => {
           <Paper w="100%">
             <Box pb="xl">
               <Slider
-                marks={[...postureMarks, ...disfluencyMarks]}
                 w="100%"
                 value={time}
                 onChange={(time) => {
@@ -201,7 +159,7 @@ export const Analyze = () => {
                 max={parseInt(data?.durationMs as unknown as string) || 0}
               />
             </Box>
-            <LineChart
+            {/* <LineChart
               w="100%"
               h={150}
               data={datac}
@@ -211,7 +169,9 @@ export const Analyze = () => {
               strokeWidth={4}
               series={[{ name: 'Apples', color: 'indigo.6' }]}
               curveType="linear"
-            />
+            /> */}
+
+            <Chart session={data} />
           </Paper>
         </Group>
       </Stack>

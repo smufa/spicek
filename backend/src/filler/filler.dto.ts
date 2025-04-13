@@ -1,7 +1,14 @@
+export class Bucket {
+  time: number;
+  value: number;
+}
+
 export class FillerDto {
   disfluency: Disfluency;
   transcription: Transcription[];
-  wpm: number[];
+  wpm: Bucket[];
+  pitch: Bucket[];
+  loud: Bucket[];
 }
 
 export class Disfluency {

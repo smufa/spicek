@@ -1,13 +1,18 @@
 import { Module } from '@nestjs/common';
-import { SessionService } from './session.service';
-import { SessionController } from './session.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Users } from 'src/users/users.entity';
-import { Session } from './session.entity';
+import { PostureModule } from 'src/posture/posture.module';
 import { TtsModule } from 'src/tts/tts.module';
+import { Users } from 'src/users/users.entity';
+import { SessionController } from './session.controller';
+import { Session } from './session.entity';
+import { SessionService } from './session.service';
 
 @Module({
-  imports: [TtsModule, TypeOrmModule.forFeature([Users, Session])],
+  imports: [
+    TtsModule,
+    PostureModule,
+    TypeOrmModule.forFeature([Users, Session]),
+  ],
   controllers: [SessionController],
   providers: [SessionService],
 })

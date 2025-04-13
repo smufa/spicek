@@ -33,7 +33,6 @@ export class NormalizedLandmarkDto {
 export class PoseFrameDto {
   @ApiProperty({
     description: 'Timestamp of the pose data in milliseconds',
-    example: 1617293247123,
     type: Number,
   })
   @IsNumber()

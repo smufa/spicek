@@ -9,6 +9,7 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateSessionDto } from './dto/update-session.dto';
 import { Session } from './session.entity';
 import { TtsService } from 'src/tts/tts.service';
+import { PostureService } from 'src/posture/posture.service';
 
 @Injectable()
 export class SessionService {
@@ -22,6 +23,8 @@ export class SessionService {
     private userRepository: Repository<Users>,
 
     private ttsService: TtsService,
+
+    private postureService: PostureService,
   ) {}
 
   async ttsBg(session: Session) {
@@ -122,6 +125,10 @@ export class SessionService {
 
       // Run this in the background
       void this.ttsBg(session);
+
+      session.postureData = this.postureService.analyzeBadPostureEvents(
+        session.poseData,
+      );
     } catch (error) {
       // delete the video file
       try {

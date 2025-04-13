@@ -3,29 +3,27 @@ import {
   Box,
   Center,
   Group,
+  LoadingOverlay,
   Paper,
   ScrollArea,
   Slider,
   Stack,
 } from '@mantine/core';
-import {
-  IconClockBolt,
-  IconManFilled,
-  IconTextScan2,
-} from '@tabler/icons-react';
+import { IconManFilled, IconTextScan2 } from '@tabler/icons-react';
 import { useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { StatsRing } from '../../components/Stats/StatRing';
 import { TextElement } from '../../components/TextComponent/TextElement';
-import {
-  fillerTokens,
-  transcriptionTokens,
-} from '../../components/TextComponent/dummy';
 import { Controlls } from '../../components/VideoTools/Controlls';
 import useTimeManager from '../../components/VideoTools/TimeTracker';
+import {
+  useSessionControllerFindOne,
+  useSessionControllerGetSessionVideo,
+} from '../../api/sessions/sessions';
+import { convertDisfluency } from '../../components/TextComponent/convUtils';
 import VideoPlayer from '../../components/VideoTools/VideoPlayer';
 
-const data = [
+const datac = [
   {
     date: 'Mar 22',
     Apples: 2890,
@@ -62,6 +60,18 @@ export const Analyze = () => {
   const searchParams = useParams();
   console.log(searchParams.id);
 
+  // const { data: videoUrl, isLoading: isLoadingVideo } =useSessionControllerGetSessionVideo(searchParams.id || '');
+  const { data, isLoading: isLoadingStats } = useSessionControllerFindOne(
+    searchParams.id || '',
+  );
+
+  console.log({ data });
+
+  const { data: videoURL, isLoading: loadingURL } =
+    useSessionControllerGetSessionVideo(searchParams.id || '');
+
+  console.log({ videoURL });
+
   const videoRef = useRef<HTMLVideoElement>(null);
   // Use the custom hook, passing the video ref.
   const { time, pause, play, seek, playState } = useTimeManager(videoRef);
@@ -74,6 +84,22 @@ export const Analyze = () => {
     [seek],
   );
 
+  const convertedDisfluency =
+    (data?.fillerDto?.disfluency &&
+      convertDisfluency(data.fillerDto.disfluency)) ||
+    [];
+
+  const postureMarks =
+    data?.postureData.map((pos) => ({
+      value: pos.startTime,
+      label: pos.issue,
+    })) || [];
+
+  const disfluencyMarks = convertedDisfluency.map((disf) => ({
+    value: disf.start_ms,
+    label: disf.fillerType,
+  }));
+
   return (
     <Stack
       h="100vh"
@@ -81,7 +107,7 @@ export const Analyze = () => {
         overflow: 'hidden',
       }}
     >
-      {/* <SessionDrawer /> */}
+      <LoadingOverlay visible={isLoadingStats || loadingURL} />
       <Stack
         h="100%"
         p="md"
@@ -100,7 +126,11 @@ export const Analyze = () => {
         >
           <Center h="100%">
             <Stack h="100%">
-              <VideoPlayer videoRef={videoRef} />
+              <VideoPlayer
+                videoRef={videoRef}
+                url={`${import.meta.env.VITE_BACKEND_API}/sessions/${searchParams.id}/video`}
+                // url={`/video.mp4`}
+              />
               <Controlls
                 pause={pause}
                 play={play}
@@ -117,33 +147,35 @@ export const Analyze = () => {
                   icon: <IconManFilled size={25} />,
                   label: 'Posture alerts',
                   // progress: 32,
-                  stats: '55',
+                  stats: data?.postureData.length.toString() || '/',
                 },
-                {
-                  color: 'dark',
-                  icon: <IconClockBolt size={20}></IconClockBolt>,
-                  label: 'Cadence match',
-                  progress: 18,
-                  stats: '55',
-                },
+                // {
+                //   color: 'dark',
+                //   icon: <IconClockBolt size={20}></IconClockBolt>,
+                //   label: 'Cadence match',
+                //   progress: 18,
+                //   stats: '55',
+                // },
                 {
                   color: 'lime',
                   icon: <IconTextScan2 size={20} />,
                   label: 'Filler words',
                   // progress: 32,
-                  stats: '55',
+                  stats: convertedDisfluency.length.toString(),
                 },
               ]}
             />
             <Paper flex={4} h="100%" withBorder p="md">
               <ScrollArea h="100%" type="always">
                 {/* <Box h="350vh"></Box> */}
-                <TextElement
-                  fillers={fillerTokens}
-                  tokens={transcriptionTokens}
-                  setTime={setTimeCb}
-                  timeMs={time}
-                />
+                {data && (
+                  <TextElement
+                    fillers={convertedDisfluency}
+                    tokens={data?.ttsData?.tokens || []}
+                    setTime={setTimeCb}
+                    timeMs={time}
+                  />
+                )}
               </ScrollArea>
             </Paper>
           </Stack>
@@ -152,22 +184,19 @@ export const Analyze = () => {
           <Paper w="100%">
             <Box pb="xl">
               <Slider
-                marks={fillerTokens.map((token) => ({
-                  value: (token.timeFromMs + token.timeToMs) / 2.0,
-                  label: token.fillerType,
-                }))}
+                marks={[...postureMarks, ...disfluencyMarks]}
                 w="100%"
                 value={time}
                 onChange={(time) => {
                   setTimeCb(time);
                 }}
-                max={4000}
+                max={parseInt(data?.durationMs as unknown as string) || 0}
               />
             </Box>
             <LineChart
               w="100%"
               h={150}
-              data={data}
+              data={datac}
               withYAxis={false}
               withXAxis={false}
               dataKey="date"

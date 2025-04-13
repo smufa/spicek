@@ -8,9 +8,9 @@ export const SessionCard = ({ session }: { session: Session }) => {
   const icon = <IconVideo />;
   const navigate = useNavigate();
   return (
-    <Alert title={name} icon={icon}  radius="md" p="lg" mb="md">
+    <Alert title={name} icon={icon} radius="md" p="lg" mb="md">
       <Stack>
-      <Group>
+        <Group>
           {new Date(createdAt).toLocaleDateString()}
           <Badge size="sm"> {(durationMs! / (1000 * 60)).toFixed(2)} min</Badge>
         </Group>
@@ -18,19 +18,24 @@ export const SessionCard = ({ session }: { session: Session }) => {
           {description}
         </Text>
         <Group>
-          <Button variant="light" onClick={
-            () => {
-              navigate(`/analyze/${session.id}`);
-            }
-          }>Analyze</Button>
           <Button
-            variant="dark"
+            variant="light"
             onClick={() => {
-              navigate(`/record/${session.id}`);
+              navigate(`/analyze/${session.id}`);
             }}
           >
-            Record
+            Analyze
           </Button>
+          {session.durationMs == undefined && (
+            <Button
+              variant="dark"
+              onClick={() => {
+                navigate(`/record/${session.id}`);
+              }}
+            >
+              Record
+            </Button>
+          )}
         </Group>
       </Stack>
     </Alert>

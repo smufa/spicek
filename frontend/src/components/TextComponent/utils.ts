@@ -1,7 +1,7 @@
 import { MantineColor } from '@mantine/core';
 import { FillerToken } from './FillerToken';
 import { Token } from './TextElement';
-import { TranscriptionToken } from './TextToken';
+import { TranscriptToken } from '../../api/model';
 
 export function getFillerColor(
   fillerType: FillerToken['fillerType'],
@@ -32,23 +32,11 @@ export function getFillerDescription(
 }
 
 // Type guard for TranscriptionToken
-export function isTranscriptionToken(
-  token: Token,
-): token is TranscriptionToken {
-  return (token as TranscriptionToken).textContent !== undefined;
+export function isTranscriptionToken(token: Token): token is TranscriptToken {
+  return (token as TranscriptToken).text !== undefined;
 }
 
 // Type guard for FillerTokens
 export function isFillerToken(token: Token): token is FillerToken {
   return (token as FillerToken).fillerType !== undefined;
-}
-
-// Type guard that checks for any token type
-export function isToken(token: unknown): token is Token {
-  return (
-    typeof token === 'object' &&
-    token !== null &&
-    'timeFromMs' in token &&
-    typeof (token as Token).timeFromMs === 'number'
-  );
 }

@@ -210,6 +210,7 @@ export class SessionService {
   async findOne(id: number, sub: number) {
     const session = await this.sessionRepository.findOne({
       where: { id },
+      relations: ['user'], // <-- load the related user
     });
 
     if (!session) throw new NotFoundException('Session not found');

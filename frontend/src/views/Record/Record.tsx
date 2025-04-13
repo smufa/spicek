@@ -4,146 +4,136 @@ import {
   Center,
   Group,
   Paper,
-
   Stack,
   Title,
   Text,
 } from '@mantine/core';
 import {
- 
   IconPlayerPlay,
   IconRefresh,
   IconVideo,
   IconVideoOff,
 } from '@tabler/icons-react';
-import { useState, useRef, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import {
+  useSessionControllerUploadData,
+  useSessionControllerUploadVideo,
+} from '../../api/sessions/sessions';
 import { NotesEditor } from '../../components/NotesEditor/NotesEditor';
+import { useMediaRecorder } from '../NEW/useMediaRecorder';
+import { usePoseEstimation } from '../NEW/usePoseEstimation';
+import VideoContainer from '../NEW/VideoContainer';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const Record = () => {
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-  const [recordingTime, setRecordingTime] = useState(0);
-  const [isPreviewMode, setIsPreviewMode] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const chunksRef = useRef<BlobPart[]>([]);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const navigate = useNavigate();
-  const { id: sess } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
 
+  const navigate = useNavigate();
+  // Refs for pose data management
+  const poseData = useRef<{ timestamp: number; landmarks: any }[]>([]);
+  const recordingStartTimeRef = useRef<number>(0);
+  // Flag to indicate if pose data is being collected
+  const isCollectingPoseData = useRef(false);
+
+  // State to hold the recorded video blob and preview URL
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // API hooks for uploading video and pose data
+  const { mutateAsync: uploadVideoApi } = useSessionControllerUploadVideo();
+  const { mutateAsync: uploadDataApi } = useSessionControllerUploadData();
+  const [uploadStatus, setUploadStatus] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+
+  // Initialize the pose estimation hook (with the added isLoading flag)
+  const { videoRef, canvasRef, displayCanvasRef, isLoading } =
+    usePoseEstimation({
+      isCollectingPoseData,
+      poseData,
+      recordingStartTimeRef,
+    });
+
+  const { isRecording, startRecording, stopRecording } = useMediaRecorder(
+    displayCanvasRef,
+    async (videoBlob: Blob) => {
+      const url = URL.createObjectURL(videoBlob);
+      setPreviewUrl(url); // Save preview URL
+      // setUploadStatus('Preview ready. You can now submit.');
+      setIsUploading(false);
+    },
+  );
+
+  // Handler for starting/stopping the recording.
+  const handleRecording = async () => {
+    // If recording is in progress, stop it.
+    if (isRecording) {
+      stopRecording();
+    } else {
+      // Reset pose data and preview
+      poseData.current = [];
+      // setUploadStatus('');
+      setPreviewUrl(null);
+      // Set the recording start time and enable pose data collection.
+      recordingStartTimeRef.current = Date.now();
+      isCollectingPoseData.current = true;
+      await startRecording();
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!previewUrl) return;
+    setIsUploading(true);
+    setUploadStatus('Uploading...');
+
+    const response = await fetch(previewUrl);
+    const videoBlob = await response.blob();
+    if (!id) {
+      return 'id not defined';
+    }
+
+    try {
+      await uploadVideoApi({
+        id: id.toString(),
+        data: { video: videoBlob },
+      });
+      await uploadDataApi({
+        id: id.toString(),
+        data: { poseData: poseData.current },
+      });
+      setUploadStatus('Upload successful');
+      navigate(`/analyze/${id}`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      setUploadStatus('Upload failed');
+    } finally {
+      setIsUploading(false);
+      isCollectingPoseData.current = false;
+    }
+  };
+
+  const handleReset = () => {
+    setPreviewUrl(null);
+    poseData.current = [];
+    setUploadStatus('');
+  };
+
+  // Optionally, revoke the preview URL to free resources when component unmounts or the URL changes.
   useEffect(() => {
     return () => {
-      // Clean up on component unmount
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
       }
     };
-  }, []);
-
-  const startRecording = async () => {
-    try {
-      // Reset state
-      setRecordingTime(0);
-      chunksRef.current = [];
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-
-      streamRef.current = stream;
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          chunksRef.current.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'video/webm' });
-        setRecordedBlob(blob);
-
-        if (videoRef.current) {
-          videoRef.current.srcObject = null;
-          videoRef.current.src = URL.createObjectURL(blob);
-          videoRef.current.controls = true;
-        }
-
-        setIsPreviewMode(true);
-      };
-
-      // Start timer
-      timerRef.current = setInterval(() => {
-        setRecordingTime((prev) => prev + 1);
-      }, 1000);
-
-      mediaRecorder.start();
-      setIsRecording(true);
-    } catch (error) {
-      console.error('Error accessing media devices:', error);
-    }
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
-      }
-
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-
-      setIsRecording(false);
-    }
-  };
-
-  const resetRecording = () => {
-    setRecordedBlob(null);
-    setIsPreviewMode(false);
-    setRecordingTime(0);
-
-    if (videoRef.current) {
-      videoRef.current.src = '';
-      videoRef.current.controls = false;
-    }
-  };
-
-  const handleSubmit = () => {
-    // In a real application, you would upload the video to your server here
-    navigate(`/analyze/${sess}`, {
-      state: {
-        videoUrl: recordedBlob ? URL.createObjectURL(recordedBlob) : null,
-      },
-    });
-  };
-
-  // Format time in MM:SS
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs
-      .toString()
-      .padStart(2, '0')}`;
-  };
+  }, [previewUrl]);
 
   return (
     <Stack>
-      <Group justify="center" align="flex-start" id="record" p={80} style={{ minWidth: '100%' }}>
+      <Group
+        justify="center"
+        align="flex-start"
+        id="record"
+        p={80}
+        style={{ minWidth: '100%' }}
+      >
         <Paper
           withBorder
           p="md"
@@ -171,20 +161,25 @@ export const Record = () => {
                 backgroundColor: '#1a1b1e',
               }}
             >
-              <video
-                ref={videoRef}
-                autoPlay
-                muted={isRecording}
-                playsInline
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  borderRadius: '8px',
-                }}
-              />
+              {previewUrl ? (
+                <div className="preview-section">
+                  <video
+                    controls
+                    src={previewUrl}
+                    width="640"
+                    height="480"
+                    style={{ marginTop: '1rem' }}
+                  />
+                </div>
+              ) : (
+                <VideoContainer
+                  videoRef={videoRef}
+                  canvasRef={canvasRef}
+                  displayCanvasRef={displayCanvasRef}
+                />
+              )}
 
-              {!isRecording && !isPreviewMode && !recordedBlob && (
+              {!isRecording && isLoading && (
                 <Box
                   style={{
                     position: 'absolute',
@@ -225,15 +220,15 @@ export const Record = () => {
                       marginRight: 8,
                     }}
                   />
-                  <Text size="sm" c="white">
-                    {formatTime(recordingTime)}
-                  </Text>
                 </Box>
               )}
+              <Text size="sm" c="white">
+                {uploadStatus}
+              </Text>
             </Center>
 
             <Group justify="center" gap="md">
-              {!isPreviewMode ? (
+              {!isUploading && !previewUrl && (
                 <Button
                   leftSection={
                     isRecording ? (
@@ -243,13 +238,15 @@ export const Record = () => {
                     )
                   }
                   color={isRecording ? 'red' : ''}
-                  onClick={isRecording ? stopRecording : startRecording}
+                  onClick={handleRecording}
                   radius="md"
                   size="md"
                 >
                   {isRecording ? 'Stop Recording' : 'Start Recording'}
                 </Button>
-              ) : (
+              )}
+
+              {previewUrl && (
                 <>
                   <Button
                     leftSection={<IconPlayerPlay size={20} />}
@@ -262,7 +259,7 @@ export const Record = () => {
                   <Button
                     leftSection={<IconRefresh size={20} />}
                     variant="outline"
-                    onClick={resetRecording}
+                    onClick={handleReset}
                     radius="md"
                     size="md"
                   >
@@ -272,96 +269,13 @@ export const Record = () => {
               )}
             </Group>
 
-            {isPreviewMode && (
+            {previewUrl && (
               <Text size="sm" c="dimmed" ta="center">
                 Review your recording before submitting or record again
               </Text>
             )}
           </Stack>
         </Paper>
-
-        {/* <Paper
-          withBorder
-          p="md"
-          radius="md"
-          shadow="sm"
-          style={{
-            width: '100%',
-            maxWidth: rem(400),
-          }}
-        >
-          <Title order={3} mb="md">
-            How It Works
-          </Title>
-          <Stack gap="md">
-            <Group wrap="nowrap" align="flex-start">
-              <RingProgress
-                size={60}
-                thickness={4}
-                sections={[{ value: 100, color: 'red.6' }]}
-                label={
-                  <Center>
-                    <IconVideo size={20} />
-                  </Center>
-                }
-              />
-              <div>
-                <Text fw={500} size="lg">
-                  Record Your Presentation
-                </Text>
-                <Text size="sm" c="dimmed">
-                  Use the recording tool to capture your presentation. Speak
-                  clearly and try to maintain good posture.
-                </Text>
-              </div>
-            </Group>
-
-            <Group wrap="nowrap" align="flex-start">
-              <RingProgress
-                size={60}
-                thickness={4}
-                sections={[{ value: 100, color: 'green.6' }]}
-                label={
-                  <Center>
-                    <IconCheck size={20} />
-                  </Center>
-                }
-              />
-              <div>
-                <Text fw={500} size="lg">
-                  Submit for Analysis
-                </Text>
-                <Text size="sm" c="dimmed">
-                  Once you're satisfied with your recording, submit it for our
-                  AI to analyze your speech patterns and body language.
-                </Text>
-              </div>
-            </Group>
-
-            <Group wrap="nowrap" align="flex-start">
-              <RingProgress
-                size={60}
-                thickness={4}
-                sections={[{ value: 100, color: 'violet.6' }]}
-                label={
-                  <Center>
-                    <IconPlayerPlay size={20} />
-                  </Center>
-                }
-              />
-              <div>
-                <Text fw={500} size="lg">
-                  Review Detailed Feedback
-                </Text>
-                <Text size="sm" c="dimmed">
-                  Receive comprehensive feedback on your presentation style,
-                  including speech analysis and posture recommendations.
-                </Text>
-              </div>
-            </Group>
-          </Stack>
-        </Paper> */}
-
         <NotesEditor />
       </Group>
     </Stack>

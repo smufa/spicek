@@ -17,6 +17,7 @@ const VideoContainer: React.FC<VideoContainerProps> = ({
       <video
         ref={videoRef}
         style={{ display: 'none' }}
+        // style={{ position: 'absolute' }}
         width="640"
         height="480"
       />

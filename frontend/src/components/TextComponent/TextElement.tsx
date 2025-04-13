@@ -32,26 +32,14 @@ export const TextElement = ({
   timeMs,
 }: TextElementProps) => {
   const tokens2 = mergeSubwordTokens(tokens);
-  console.log(tokens2);
-  console.log(tokens);
-
   const mergedTokens = mergeTokensAndFillers(tokens2, fillers).sort(
     (a, b) => (a.start_ms + a.end_ms) / 2 - (b.start_ms + b.end_ms) / 2,
   );
 
   return (
-    <Box
-      // display="flex"
-      style={
-        {
-          // justifyContent: 'space-between',
-        }
-      }
-    >
+    <Box>
       {mergedTokens.map((token) => {
         if (isTranscriptionToken(token)) {
-          // console.log({ token });
-
           return (
             <TextToken
               key={token.start_ms + '' + token.text}

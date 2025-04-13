@@ -16,10 +16,7 @@ import { StatsRing } from '../../components/Stats/StatRing';
 import { TextElement } from '../../components/TextComponent/TextElement';
 import { Controlls } from '../../components/VideoTools/Controlls';
 import useTimeManager from '../../components/VideoTools/TimeTracker';
-import {
-  useSessionControllerFindOne,
-  useSessionControllerGetSessionVideo,
-} from '../../api/sessions/sessions';
+import { useSessionControllerFindOne } from '../../api/sessions/sessions';
 import { convertDisfluency } from '../../components/TextComponent/convUtils';
 import VideoPlayer from '../../components/VideoTools/VideoPlayer';
 
@@ -58,19 +55,14 @@ const datac = [
 
 export const Analyze = () => {
   const searchParams = useParams();
-  console.log(searchParams.id);
 
   // const { data: videoUrl, isLoading: isLoadingVideo } =useSessionControllerGetSessionVideo(searchParams.id || '');
   const { data, isLoading: isLoadingStats } = useSessionControllerFindOne(
     searchParams.id || '',
   );
 
-  console.log({ data });
-
-  const { data: videoURL, isLoading: loadingURL } =
-    useSessionControllerGetSessionVideo(searchParams.id || '');
-
-  console.log({ videoURL });
+  // const { data: videoURL, isLoading: loadingURL } =
+  //   useSessionControllerGetSessionVideo(searchParams.id || '');
 
   const videoRef = useRef<HTMLVideoElement>(null);
   // Use the custom hook, passing the video ref.
@@ -107,7 +99,7 @@ export const Analyze = () => {
         overflow: 'hidden',
       }}
     >
-      <LoadingOverlay visible={isLoadingStats || loadingURL} />
+      <LoadingOverlay visible={isLoadingStats} />
       <Stack
         h="100%"
         p="md"
@@ -149,13 +141,6 @@ export const Analyze = () => {
                   // progress: 32,
                   stats: data?.postureData.length.toString() || '/',
                 },
-                // {
-                //   color: 'dark',
-                //   icon: <IconClockBolt size={20}></IconClockBolt>,
-                //   label: 'Cadence match',
-                //   progress: 18,
-                //   stats: '55',
-                // },
                 {
                   color: 'lime',
                   icon: <IconTextScan2 size={20} />,
@@ -201,11 +186,7 @@ export const Analyze = () => {
               withXAxis={false}
               dataKey="date"
               strokeWidth={4}
-              series={[
-                { name: 'Apples', color: 'indigo.6' },
-                // { name: 'Oranges', color: 'blue.6' },
-                // { name: 'Tomatoes', color: 'teal.6' },
-              ]}
+              series={[{ name: 'Apples', color: 'indigo.6' }]}
               curveType="linear"
             />
           </Paper>

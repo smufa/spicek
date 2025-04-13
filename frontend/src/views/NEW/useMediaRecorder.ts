@@ -7,7 +7,7 @@ interface UseMediaRecorderResult {
 }
 
 export function useMediaRecorder(
-  canvasRef: React.RefObject<HTMLCanvasElement | null>,
+  canvasRef: React.RefObject<HTMLMediaElement | null>,
   onRecordingComplete: (videoBlob: Blob) => void,
 ): UseMediaRecorderResult {
   const [isRecording, setIsRecording] = useState(false);
@@ -29,7 +29,8 @@ export function useMediaRecorder(
       });
 
       // Capture the canvas stream (video only)
-      const videoStream = canvasRef.current.captureStream(30);
+      //@ts-expect-error asd
+      const videoStream = canvasRef.current.captureStream();
       // Combine video and audio tracks
       const combinedTracks = [
         ...videoStream.getVideoTracks(),

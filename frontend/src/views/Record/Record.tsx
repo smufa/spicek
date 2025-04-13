@@ -53,7 +53,7 @@ export const Record = () => {
     });
 
   const { isRecording, startRecording, stopRecording } = useMediaRecorder(
-    displayCanvasRef,
+    videoRef,
     async (videoBlob: Blob) => {
       const url = URL.createObjectURL(videoBlob);
       setPreviewUrl(url); // Save preview URL

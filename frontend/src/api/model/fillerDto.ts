@@ -7,9 +7,12 @@
  */
 import type { Disfluency } from './disfluency';
 import type { Transcription } from './transcription';
+import type { Bucket } from './bucket';
 
 export interface FillerDto {
   disfluency: Disfluency;
   transcription: Transcription[];
-  wpm: number[];
+  wpm: Bucket[];
+  pitch: Bucket[];
+  loud: Bucket[];
 }

@@ -1,14 +1,12 @@
-import { Stack, Badge } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
-import { useStore } from '@nanostores/react';
-import { $currUser } from '../../global-store/userStore';
 
 export const AppLayout = () => {
-  const usr = useStore($currUser);
+  // const usr = useStore($currUser);
   return (
     <Stack h="100vh" w="100%">
       <Outlet />
-      <Badge
+      {/* <Badge
         m="sm"
         size="xs"
         style={{
@@ -18,7 +16,7 @@ export const AppLayout = () => {
         }}
       >
         USR:{usr?.accessToken ? usr.accessToken : 'LOGGED OUT'}
-      </Badge>
+      </Badge> */}
     </Stack>
   );
 };

@@ -9,7 +9,7 @@ import {
   Stack,
 } from '@mantine/core';
 import { IconManFilled, IconTextScan2 } from '@tabler/icons-react';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { StatsRing } from '../../components/Stats/StatRing';
 import { TextElement } from '../../components/TextComponent/TextElement';
@@ -28,7 +28,8 @@ export const Analyze = () => {
     searchParams.id || '',
   );
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { time, pause, play, seek, playState } = useTimeManager(videoRef);
+  const { time, setTime, pause, play, seek, playState } =
+    useTimeManager(videoRef);
 
   const setTimeCb = useCallback(
     (timeMs: number) => {
@@ -36,6 +37,17 @@ export const Analyze = () => {
     },
     [seek],
   );
+
+  // run use effect every 30 ms
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (playState === 'playing') {
+        setTime((videoRef.current?.currentTime || 0) * 1000 || 0);
+      }
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [time, setTime, playState]);
 
   const convertedDisfluency =
     (data?.fillerDto?.disfluency &&

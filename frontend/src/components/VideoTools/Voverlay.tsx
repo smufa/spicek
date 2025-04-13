@@ -44,7 +44,14 @@ const VideoPoseOverlay: React.FC<VideoPoseOverlayProps> = ({
 
         // Sync pose with video timestamp
         const currentTimeMs = video.currentTime * 1000;
-        const nearest = poses.findLast((p) => p.timestamp <= currentTimeMs);
+
+        const nearest = poses.reduce((prev, curr) => {
+          return Math.abs(curr.timestamp - currentTimeMs) <
+            Math.abs(prev.timestamp - currentTimeMs)
+            ? curr
+            : prev;
+        });
+
         if (nearest) {
           drawConnectors(ctx, nearest.landmarks, POSE_CONNECTIONS, {
             color: '#FFFFFF',

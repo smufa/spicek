@@ -33,7 +33,6 @@ export const Controlls = ({
       w=""
       pos="absolute"
       bottom={10}
-      left={10}
       shadow="sm"
     >
       <Group justify="space-between">

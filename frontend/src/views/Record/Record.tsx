@@ -222,9 +222,9 @@ export const Record = () => {
                   />
                 </Box>
               )}
-              <Text size="sm" c="white">
+              {/* <Text size="sm" c="white">
                 {uploadStatus}
-              </Text>
+              </Text> */}
             </Center>
 
             <Group justify="center" gap="md">
@@ -253,8 +253,10 @@ export const Record = () => {
                     onClick={handleSubmit}
                     radius="md"
                     size="md"
+                    disabled={uploadStatus == 'Upload successful'}
+                    loading={uploadStatus == 'Uploading...'}
                   >
-                    Submit Presentation
+                    {uploadStatus == '' ? ' Submit Presentation' : uploadStatus}
                   </Button>
                   <Button
                     leftSection={<IconRefresh size={20} />}

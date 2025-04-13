@@ -71,7 +71,7 @@ export const Analyze = () => {
           }}
         >
           <Center h="100%">
-            <Stack h="100%">
+            <Stack h="100%" pos="relative">
               {data?.poseData && (
                 <VideoPoseOverlay
                   videoRef={videoRef}
@@ -137,10 +137,15 @@ export const Analyze = () => {
               <Slider
                 w="100%"
                 value={time}
-                onChange={(time) => {
-                  setTimeCb(time);
+                onChange={(newTime) => {
+                  setTimeCb(newTime);
                 }}
                 max={parseInt(data?.durationMs as unknown as string) || 0}
+                step={100} // Add step for smoother updates
+                onChangeEnd={(newTime) => {
+                  // This ensures the final position is set when sliding ends
+                  setTimeCb(newTime);
+                }}
               />
             </Box>
             <Chart session={data} />

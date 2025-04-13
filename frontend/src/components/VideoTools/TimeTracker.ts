@@ -68,6 +68,7 @@ const useTimeManager = (
 
   const play = () => {
     if (videoRef.current) {
+      setPlayState('playing');
       videoRef.current
         .play()
         .then(() => {
@@ -82,9 +83,8 @@ const useTimeManager = (
   const pause = () => {
     if (videoRef.current) {
       videoRef.current.pause();
-      if (isMounted.current) {
-        setPlayState('paused');
-      }
+
+      setPlayState('paused');
     }
   };
 
@@ -98,7 +98,7 @@ const useTimeManager = (
     }
   };
 
-  return { time, playState, play, pause, seek };
+  return { time, playState, play, pause, seek, setTime };
 };
 
 export default useTimeManager;
